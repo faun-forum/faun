@@ -4,53 +4,78 @@ require "async/io/generic"
 require "async/io/protocol/line"
 require "yaml"
 
-class Section < Hash
-  def initialize(path, type)
-    super()
+class Section
+  attr_reader :id, :items
+
+  def initialize(id, path, type)
+    @id = id
+
+    subs = {}
     Dir.each_child(path) do |topic|
       dir = File.join(path, topic)
       next unless File.directory?(dir)
 
-      self[topic] = type.new(dir)
+      name, _, id = topic.rpartition(".@")
+      subs[name] = type.new(id.to_i, dir)
     end
+    @items = subs.sort_by { |_, sub| sub.id }.to_h
+  end
 
-    replace(
-      sort_by { |topic, _| topic.rpartition(".@")[2] }
-        .to_h
-        .transform_keys { |topic| topic.rpartition(".@")[0] }
-    )
+  def each(&block)
+    @items.each(&block)
+  end
+
+  def each_key(&block)
+    @items.each_key(&block)
+  end
+
+  def each_value(&block)
+    @items.each_value(&block)
+  end
+
+  def to_json(*args)
+    {
+      :id => @id,
+      item_name => @items
+    }.to_json(*args)
   end
 end
 
 class Forum < Section
   def initialize(path)
-    super(path, Topic)
+    super(0, path, Topic)
+  end
+
+  def item_name
+    "topics"
   end
 end
 
 class Topic < Section
-  def initialize(path)
-    super(path, Subtopic)
+  def initialize(id, path)
+    super(id, path, Subtopic)
+  end
+
+  def item_name
+    "chapters"
   end
 end
 
 class Subtopic < Section
-  def initialize(path)
-    super(path, Post)
+  def initialize(id, path)
+    super(id, path, Post)
+  end
+
+  def item_name
+    "posts"
   end
 end
 
-class Threads < Section
-  def initialize(path)
-    super(path, ForumThread)
-  end
-end
+class Post < Section
+  attr_reader :id, :meta, :content
 
-class Post
-  attr_reader :meta, :content, :threads
-
-  def initialize(path)
-    @threads = Threads.new(path)
+  def initialize(id, path)
+    super(id, path, ForumThread)
     Async do
       File.open(File.join(path, "latest.md"), "r") do |file|
         generic = Async::IO::Stream.new(file)
@@ -64,23 +89,30 @@ class Post
     end
   end
 
+  def item_name
+    "threads"
+  end
+
   def to_json(*args)
-    json = @meta
+    json = @meta.clone
     json.merge!(
-      'content' => @content,
-      'threads' => @threads
+      id: @id,
+      content: @content,
+      threads: @threads
     )
     json.to_json(*args)
   end
 end
 
 class ForumThread < Section
-  def initialize(path)
-    super(path, Comment)
+  def initialize(id, path)
+    super(id, path, NilClass)
+  end
+
+  def item_name
+    "comments"
   end
 end
 
 class Comment
-  def initialize(_)
-  end
 end
