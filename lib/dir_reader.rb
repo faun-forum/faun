@@ -1,21 +1,34 @@
-def transform(map)
-  map
-    .sort_by { |topic, _| topic.rpartition(".@")[2] }.to_h
-    .transform_keys { |topic| topic.rpartition(".@")[0] }
+class Section < Hash
+  def initialize(path, type)
+    super()
+    Dir.each_child(path) { |topic| self[topic] = type.new(File.join(path, topic)) }
+    replace(
+      sort_by { |topic, _| topic.rpartition(".@")[2] }
+        .to_h
+        .transform_keys { |topic| topic.rpartition(".@")[0] }
+    )
+  end
 end
 
-module DirReader
-  def self.read(path)
-    output = Dir.each_child(path).map do |topic|
-      contents = Dir.each_child(File.join(path, topic)).map do |subtopic|
-        contents = Dir.each_child(File.join(path, topic, subtopic)).map do |post|
-          post
-        end
-        [subtopic, transform(contents)]
-      end.to_h
-      [topic, transform(contents)]
-    end.to_h
+class Forum < Section
+  def initialize(path)
+    super(path, Topic)
+  end
+end
 
-    transform(output)
+class Topic < Section
+  def initialize(path)
+    super(path, Subtopic)
+  end
+end
+
+class Subtopic < Section
+  def initialize(path)
+    super(path, Post)
+  end
+end
+
+class Post
+  def initialize(_)
   end
 end
