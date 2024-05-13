@@ -12,6 +12,8 @@ GEM
       fiber-annotation
       io-event (~> 1.5, >= 1.5.1)
       timers (~> 4.1)
+    async-io (1.43.2)
+      async
     console (1.25.2)
       fiber-annotation
       fiber-local (~> 1.1)
@@ -55,6 +57,7 @@ PLATFORMS
 
 DEPENDENCIES
   async (~> 2.11)
+  async-io (~> 1.11)
   owl_forum!
   rake (~> 13.0)
   rubocop (~> 1.21)

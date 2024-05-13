@@ -7,5 +7,14 @@ require "owl_forum"
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
 
-puts Forum.new("data")
-
+forum = Forum.new("data")
+puts JSON(forum)
+forum.each do |name, topic|
+  puts name
+  topic.each do |name, sub|
+    puts "\t#{name}"
+    sub.each_value do |post|
+      puts "\t\t#{post.meta}"
+    end
+  end
+end
