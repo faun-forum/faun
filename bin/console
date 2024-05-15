@@ -26,34 +26,51 @@ class OwlCli < Thor
       return
     end
 
-    chapter = 0
+    meta = @forum.meta || {}
+    puts
+    print meta["name"].ljust(35).colorize(:light_green).bold if meta["name"]
+    print "\t", meta["details"] if meta["details"]
+    print "\t(C) #{meta["copyright"]}".colorize(:light_black) if meta["copyright"]
+    puts
+
+    parts = meta["parts"] || {}
     @forum.each do |name, topic|
-      if topic.id - chapter >= 10
-        chapter = chapter + 10
-        puts ('_' * 35).colorize(:light_black)
+      if (part = parts[topic.id])
+        print part["name"].ljust(35).colorize(:light_green).underline if part["name"]
+        print "\t", part["details"].colorize(:light_black) if part["details"]
+        puts
       end
 
       len = name.length + topic.id.to_s.length
-      puts "#{name.colorize(:light_yellow).bold}#{('.' * (35 - len)).colorize(:light_black)}#{topic.id.to_s.colorize(:light_blue).italic}"
+      print name.colorize(:light_yellow).bold
+      print ('.' * (35 - len)).colorize(:light_black).bold
+      print topic.id.to_s.colorize(:light_blue).italic
+      print "\t", topic.meta["details"].colorize(:light_black) if topic.meta["details"]
+      puts
 
-      part = 0
+      subparts = topic.meta["parts"] || {}
       topic.each do |name, sub|
-        if sub.id - part >= 10
-          part = part + 10
-          puts "\t#{('-' * 27).colorize(:light_black)}"
+        if (part = subparts[sub.id])
+          print "\t", (part["name"] || "").ljust(27, '-').colorize(:light_black).bold
+          print "\t", part["details"].colorize(:light_black) if part["details"]
+          puts
         end
 
         id = "#{topic.id}.#{sub.id}"
         len = name.length + id.length
-        puts "\t#{name}#{('.' * (27 - len)).colorize(:light_black)}#{id.colorize(:light_blue).italic}"
+        print "\t", name
+        print ('.' * (27 - len)).colorize(:light_black)
+        print id.colorize(:light_blue).italic
+        print "\t", sub.meta["details"].colorize(:light_black) if sub.meta["details"]
+        puts
 
-        sub.each_value do |post|
-          puts "\t\t#{post.meta}"
-        end
+        # sub.each_value do |post|
+        #  puts "\t\t#{post.meta}"
+        # end
       end
       puts
     end
   end
 end
 
-OwlCli.start(ARGV)
+OwlCli.start

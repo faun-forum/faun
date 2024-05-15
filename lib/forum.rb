@@ -41,7 +41,26 @@ class Section
   end
 end
 
-class Forum < Section
+class SectionWithMeta < Section
+  attr_reader :meta
+
+  def initialize(id, path, type)
+    super(id, path, type)
+
+    Async do
+      begin
+        File.open(File.join(path, "meta.yaml"), "r") do |file|
+          generic = Async::IO::Stream.new(file)
+          @meta = YAML.load(generic.read)
+        end
+      rescue
+        @meta = {}
+      end
+    end
+  end
+end
+
+class Forum < SectionWithMeta
   def initialize(path)
     super(0, path, Topic)
   end
@@ -51,7 +70,7 @@ class Forum < Section
   end
 end
 
-class Topic < Section
+class Topic < SectionWithMeta
   def initialize(id, path)
     super(id, path, Subtopic)
   end
@@ -61,7 +80,7 @@ class Topic < Section
   end
 end
 
-class Subtopic < Section
+class Subtopic < SectionWithMeta
   def initialize(id, path)
     super(id, path, Post)
   end
