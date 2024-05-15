@@ -5,3 +5,14 @@ html
 
   body
     h1 Contents
+
+    - @forum.each do |name, topic|
+      - if (part = (@forum.meta['parts'] || {})[topic.id])
+        h2 title=part['details'] =part['name']
+      div
+        h3(title=topic.meta['details']): a[href="/posts/#{topic.id}"] =name
+        ol
+          - topic.each do |subname, sub|
+            - if (subpart = (topic.meta['parts'] || {})[sub.id])
+              h4 title=subpart['details'] =subpart['name']
+            li(title=sub.meta['details']): a[href="/posts/#{topic.id}/#{sub.id}"] =subname
