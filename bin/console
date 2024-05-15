@@ -3,18 +3,57 @@
 
 require "bundler/setup"
 require "owl_forum"
+require "colorize"
+require "thor"
 
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
 
-forum = Forum.new("data")
-puts JSON(forum)
-forum.each do |name, topic|
-  puts name
-  topic.each do |name, sub|
-    puts "\t#{name}"
-    sub.each_value do |post|
-      puts "\t\t#{post.meta}"
+class OwlCli < Thor
+  class_option :forum, type: :string, aliases: "-n", desc: "Forum name"
+  class_option :json, type: :boolean, aliases: "-j", desc: "Print out in JSON"
+
+  def initialize(args = [], local_options = {}, config = {})
+    super
+    @json = options[:json] || false
+    @forum = Forum.new("/var/lib/owl/#{options[:forum]}") if options[:forum]
+  end
+
+  desc "topics", "List forum topics"
+  def topics
+    if @json
+      puts JSON(@forum)
+      return
+    end
+
+    chapter = 0
+    @forum.each do |name, topic|
+      if topic.id - chapter >= 10
+        chapter = chapter + 10
+        puts ('_' * 35).colorize(:light_black)
+      end
+
+      len = name.length + topic.id.to_s.length
+      puts "#{name.colorize(:light_yellow).bold}#{('.' * (35 - len)).colorize(:light_black)}#{topic.id.to_s.colorize(:light_blue).italic}"
+
+      part = 0
+      topic.each do |name, sub|
+        if sub.id - part >= 10
+          part = part + 10
+          puts "\t#{('-' * 27).colorize(:light_black)}"
+        end
+
+        id = "#{topic.id}.#{sub.id}"
+        len = name.length + id.length
+        puts "\t#{name}#{('.' * (27 - len)).colorize(:light_black)}#{id.colorize(:light_blue).italic}"
+
+        sub.each_value do |post|
+          puts "\t\t#{post.meta}"
+        end
+      end
+      puts
     end
   end
 end
+
+OwlCli.start(ARGV)

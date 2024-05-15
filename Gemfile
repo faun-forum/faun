@@ -6,7 +6,9 @@ source "https://rubygems.org"
 gemspec
 
 gem "async", "~> 2.11"
-gem 'async-io', "~> 1.11"
+gem "async-io", "~> 1.11"
+gem "thor", "~> 0.19"
+gem "colorize", "~> 0.7"
 
 gem "rake", "~> 13.0"
 
