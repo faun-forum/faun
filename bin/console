@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "owl_forum"
+require "owl"
 require "colorize"
 require "thor"
 
@@ -16,7 +16,7 @@ class OwlCli < Thor
   def initialize(args = [], local_options = {}, config = {})
     super
     @json = options[:json] || false
-    @forum = Forum.new("/var/lib/owl/#{options[:forum]}") if options[:forum]
+    @forum = Owl::Forum.new("/var/lib/owl/#{options[:forum]}") if options[:forum]
   end
 
   desc "topics", "List forum topics"
