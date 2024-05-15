@@ -13,6 +13,7 @@ gem "sinatra", "~> 4.0"
 gem "sinatra-contrib", "~> 4.0"
 gem "puma", "~> 6.4"
 gem "rackup", "~> 2.1"
+gem "slim", "~> 5.2"
 
 gem "rake", "~> 13.0"
 
