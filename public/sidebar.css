@@ -1,0 +1,60 @@
+body {
+    background-color: #19164c;
+    color: white;
+}
+
+a, a:hover, a:visited, a:active {
+    color: white;
+    text-decoration: none;
+}
+
+body > header {
+    margin-top: 1rem !important;
+}
+
+div + div > h3 {
+    margin-top: 0.5rem;
+}
+
+header, h3, li {
+    font-family: "Slabo 27px", serif;
+    padding: 0.4rem 0.5rem;
+}
+
+ol {
+    margin-left: 1rem;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 1rem - 0.5em);
+}
+
+h2, h3, h4 {
+    font-family: "Anton", "Impact", sans-serif;
+}
+
+h2, h4 {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+h2 {
+    color: #b54cff;
+}
+
+hr {
+    flex-grow: 1;
+    border: none;
+    border-top: 1px solid grey;
+}
+
+h4 > hr {
+    margin-left: 0.5em;
+}
+
+:not(h4) > hr {
+    margin-top: 0;
+    margin-bottom: 0;
+}

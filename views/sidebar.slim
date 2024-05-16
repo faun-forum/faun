@@ -3,16 +3,25 @@ html
   head
     title Forum Contents
 
+    link rel="stylesheet" href="/wipe.css"
+    link rel="stylesheet" href="/main.css"
+    link rel="stylesheet" href="/sidebar.css"
+
   body
     h1 Contents
 
     - @forum.each do |name, topic|
       - if (part = (@forum.meta['parts'] || {})[topic.id])
-        h2 title=part['details'] =part['name']
+        header title=part['details']
+          h2 =part['name']
+          hr
       div
         h3(title=topic.meta['details']): a[href="/posts/#{topic.id}"] =name
         ol
           - topic.each do |subname, sub|
             - if (subpart = (topic.meta['parts'] || {})[sub.id])
-              h4 title=subpart['details'] =subpart['name']
+              header title=subpart['details']
+                - if subpart['name']
+                  h4 =subpart['name']
+                hr
             li(title=sub.meta['details']): a[href="/posts/#{topic.id}/#{sub.id}"] =subname

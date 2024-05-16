@@ -1,0 +1,17 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+li {
+    margin: 1rem;
+}
+
+li header {
+    font-family: "Slabo 27px", serif;
+}
+
+
+li div {
+    
+}
