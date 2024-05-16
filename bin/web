@@ -69,6 +69,25 @@ module OwlApi
       get '/contents' do
         json @forum
       end
+
+      get '/posts' do
+        @forum.posts.to_json
+      end
+
+      get '/posts/:id' do |id|
+        topic = @forum.topic(id.to_i)
+        topic.posts.to_json
+      end
+
+      get '/posts/:id/:subid' do |id, subid|
+        sub = @forum.subtopic(id.to_i, subid.to_i)
+        sub.posts.to_json
+      end
+
+      get '/post/:id' do |id|
+        post = @forum.post(id.to_i)
+        post.to_json
+      end
     end
   end
 end
