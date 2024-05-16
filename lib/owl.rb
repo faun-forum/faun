@@ -63,7 +63,7 @@ module Owl
         rescue
           @meta = {}
         end
-      end
+      end.wait
     end
   end
 
@@ -148,7 +148,7 @@ module Owl
           @meta = YAML.load(meta)
           @content = generic.read.force_encoding("UTF-8")
         end
-      end
+      end.wait
     end
 
     def title
