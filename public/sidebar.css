@@ -26,11 +26,15 @@ main > header, li {
     font-family: "Slabo 27px", sans-serif;
 }
 
+main section:last-child {
+    margin-bottom: 6rem;
+}
+
 section + section > h3 {
     margin-top: 0.5rem;
 }
 
-h2, h3, ol header, li {
+h2, h3 > a, ol header, li > a {
     padding: 0.4rem 0.5rem;
 }
 
@@ -39,7 +43,7 @@ h2, h3, h4 {
 }
 
 h2 {
-    color: #375eac;
+    color: #ff8b8b;
 }
 
 hr {
@@ -59,4 +63,20 @@ h4 + hr {
 
 ol {
     margin-left: 1rem;
+}
+
+li > a, h3 > a {
+    display: block;
+}
+
+li > a:hover, h3 > a:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+li > a:active, h3 > a:active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+li > a.selected, h3 > a.selected {
+    background-color: rgba(255, 0, 0, 0.2);
 }

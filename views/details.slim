@@ -14,16 +14,20 @@ html
           box-sizing: border-box;
       }
 
-      li, li > header, li > div {
+      li > a {
+          display: block;
+      }
+
+      li, li > a > header, li > a > div {
           width: 100%;
       }
 
-      li > div {
+      li > a > div {
           display: flex;
           justify-content: space-between;
       }
 
-      li .date {
+      li > a .date {
           text-align: right;
       }
 
@@ -35,13 +39,15 @@ html
     main
       ul
         li
-          header 13 Degrees of Initiation
-          div
-            span.author Aiom Ominous
-            span.date 13 May 2024
+          a href="/content" target="content"
+            header 13 Degrees of Initiation
+            div
+              span.author Aiom Ominous
+              span.date 13 May 2024
 
         li
-          header Khem: Sinister Hermetic Alchemy
-          div
-            span.author Aiom Ominous
-            span.date 23 Aug 2022
+          a.selected href="/content" target="content"
+            header Khem: Sinister Hermetic Alchemy
+            div
+              span.author Aiom Ominous
+              span.date 23 Aug 2022

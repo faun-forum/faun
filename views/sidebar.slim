@@ -31,7 +31,7 @@ html
             h2 =part['name']
             hr
         section
-          h3(title=topic.meta['details']): a[href="/posts/#{topic.id}"] =name
+          h3(title=topic.meta['details']): a[href="/posts/#{topic.id}" target="details"] =name
           ol
             - topic.each do |subname, sub|
               - if (subpart = (topic.meta['parts'] || {})[sub.id])
@@ -39,4 +39,4 @@ html
                   - if subpart['name']
                     h4 =subpart['name']
                   hr
-              li(title=sub.meta['details']): a[href="/posts/#{topic.id}/#{sub.id}"] =subname
+              li(title=sub.meta['details']): a[href="/posts/#{topic.id}/#{sub.id}" target="details"] =subname

@@ -3,19 +3,37 @@ body {
     color: white;
 }
 
-li {
+a, a:hover, a:visited, a:active {
+    color: white;
+    text-decoration: none;
+}
+
+li > a {
     padding: 1rem;
 }
 
-li > header {
-    font-family: "Slabo 27px", sans-serif;
-    font-size: larger;
+li > a:hover {
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
-li > div {
+li > a:active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+li > a.selected {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+li > a > header {
+    font-family: "Slabo 27px", sans-serif;
+    font-size: larger;
+    font-weight: bold;
+}
+
+li > a > div {
     font-family: "Titillium Web", sans-serif;
 }
 
-li > header + div {
+li > a > header + div {
     margin-top: 0.5em;
 }
