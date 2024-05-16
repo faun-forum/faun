@@ -1,5 +1,10 @@
+/*
+ * General elements
+ */
+
 body {
-    background-color: #19164c;
+    /* background-color: #19164c; */
+    background-color: #2b2d30;
     color: white;
 }
 
@@ -8,53 +13,50 @@ a, a:hover, a:visited, a:active {
     text-decoration: none;
 }
 
-body > header {
+/*
+ * Structural elements
+ */
+
+main > header {
     margin-top: 1rem !important;
+    width: calc(100% - 0.5rem);
 }
 
-div + div > h3 {
+main > header, li {
+    font-family: "Slabo 27px", sans-serif;
+}
+
+section + section > h3 {
     margin-top: 0.5rem;
 }
 
-header, h3, li {
-    font-family: "Slabo 27px", sans-serif;
+h2, h3, ol header, li {
     padding: 0.4rem 0.5rem;
-}
-
-ol {
-    margin-left: 1rem;
-}
-
-header {
-    display: flex;
-    align-items: center;
-    width: calc(100% - 1rem - 0.5em);
 }
 
 h2, h3, h4 {
     font-family: "Anton", "Impact", sans-serif;
 }
 
-h2, h4 {
-    flex-grow: 0;
-    flex-shrink: 0;
-}
-
 h2 {
-    color: #b54cff;
+    color: #375eac;
 }
 
 hr {
     flex-grow: 1;
     border: none;
-    border-top: 1px solid grey;
+    border-top: 1px solid #666;
 }
 
-h4 > hr {
+h4 + hr {
     margin-left: 0.5em;
 }
 
 :not(h4) > hr {
     margin-top: 0;
     margin-bottom: 0;
+}
+
+ol {
+    margin-left: 1rem;
 }

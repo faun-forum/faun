@@ -26,6 +26,8 @@ GEM
     fiber-storage (0.1.0)
     io-event (1.5.1)
     json (2.7.2)
+    kramdown (2.4.0)
+      rexml
     language_server-protocol (3.17.0.3)
     multi_json (1.15.0)
     mustermann (3.0.0)
@@ -96,6 +98,7 @@ DEPENDENCIES
   async (~> 2.11)
   async-io (~> 1.11)
   colorize (~> 0.7)
+  kramdown (~> 2.4)
   owl!
   puma (~> 6.4)
   rackup (~> 2.1)

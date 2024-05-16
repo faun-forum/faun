@@ -4,24 +4,39 @@ html
     title Forum Contents
 
     link rel="stylesheet" href="/wipe.css"
-    link rel="stylesheet" href="/main.css"
+    link rel="stylesheet" href="/main-layout.css"
+    link rel="stylesheet" href="/main-style.css"
     link rel="stylesheet" href="/sidebar.css"
 
-  body
-    h1 Contents
+    css:
+      header {
+        display: flex;
+        align-items: center;
+      }
 
-    - @forum.each do |name, topic|
-      - if (part = (@forum.meta['parts'] || {})[topic.id])
-        header title=part['details']
-          h2 =part['name']
-          hr
-      div
-        h3(title=topic.meta['details']): a[href="/posts/#{topic.id}"] =name
-        ol
-          - topic.each do |subname, sub|
-            - if (subpart = (topic.meta['parts'] || {})[sub.id])
-              header title=subpart['details']
-                - if subpart['name']
-                  h4 =subpart['name']
-                hr
-            li(title=sub.meta['details']): a[href="/posts/#{topic.id}/#{sub.id}"] =subname
+      h2, h4 {
+        flex-grow: 0;
+        flex-shrink: 0;
+      }
+
+
+  body
+    nav
+      h1 Contents
+
+    main
+      - @forum.each do |name, topic|
+        - if (part = (@forum.meta['parts'] || {})[topic.id])
+          header title=part['details']
+            h2 =part['name']
+            hr
+        section
+          h3(title=topic.meta['details']): a[href="/posts/#{topic.id}"] =name
+          ol
+            - topic.each do |subname, sub|
+              - if (subpart = (topic.meta['parts'] || {})[sub.id])
+                header title=subpart['details']
+                  - if subpart['name']
+                    h4 =subpart['name']
+                  hr
+              li(title=sub.meta['details']): a[href="/posts/#{topic.id}/#{sub.id}"] =subname

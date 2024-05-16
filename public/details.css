@@ -1,19 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Slabo+27px&family=Titillium+Web:wght@200;400;700;900&display=swap');
-
 body {
-    background-color: black;
+    background-color: #1e1f22;
     color: white;
 }
 
 li {
     padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-}
-
-li, li > header, li > div {
-    width: 100%;
 }
 
 li > header {
@@ -23,14 +14,8 @@ li > header {
 
 li > div {
     font-family: "Titillium Web", sans-serif;
-    display: flex;
-    justify-content: space-between;
 }
 
 li > header + div {
     margin-top: 0.5em;
-}
-
-li .date {
-    text-align: right;
 }

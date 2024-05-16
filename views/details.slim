@@ -3,15 +3,45 @@ html
   head
     title Post List
     link rel="stylesheet" href="/wipe.css"
-    link rel="stylesheet" href="/main.css"
+    link rel="stylesheet" href="/main-layout.css"
+    link rel="stylesheet" href="/main-style.css"
     link rel="stylesheet" href="/details.css"
 
-  body
-    h1 Initiation
+    css:
+      li {
+          display: flex;
+          flex-direction: column;
+          box-sizing: border-box;
+      }
 
-    ul
-      li
-        header 13 Degrees of Initiation
-        div
-          span.author Aiom Ominous
-          span.date 13 May 2024
+      li, li > header, li > div {
+          width: 100%;
+      }
+
+      li > div {
+          display: flex;
+          justify-content: space-between;
+      }
+
+      li .date {
+          text-align: right;
+      }
+
+
+  body
+    nav
+      h1 Initiation
+
+    main
+      ul
+        li
+          header 13 Degrees of Initiation
+          div
+            span.author Aiom Ominous
+            span.date 13 May 2024
+
+        li
+          header Khem: Sinister Hermetic Alchemy
+          div
+            span.author Aiom Ominous
+            span.date 23 Aug 2022
