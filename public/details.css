@@ -25,15 +25,21 @@ li > a.selected {
 }
 
 li > a > header {
-    font-family: "Slabo 27px", sans-serif;
+    font-family: "Alumni Sans", sans-serif;
     font-size: larger;
-    font-weight: bold;
 }
 
 li > a > div {
-    font-family: "Titillium Web", sans-serif;
+    font-family: serif;
+    font-weight: lighter;
+    font-size: small;
+    color: #666;
+}
+
+li .author {
+    font-style: italic;
 }
 
 li > a > header + div {
-    margin-top: 0.5em;
+    margin-top: 1em;
 }

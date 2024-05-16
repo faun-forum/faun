@@ -6,6 +6,7 @@ require "owl"
 require "sinatra"
 require "sinatra/json"
 require "sinatra/namespace"
+require "kramdown"
 require "logger"
 
 module OwlApi
@@ -28,20 +29,27 @@ module OwlApi
       set :logging, Logger::DEBUG
     end
 
+    before :development do
+      cache_control :no_store, :no_cache, :must_revalidate
+    end
+
     get "/" do
       redirect 'index.html'
     end
 
     get "/sidebar" do
-      slim :sidebar, :forum => @forum
+      slim :sidebar
     end
 
-    get "/details" do
-      slim :details
+    get "/posts/:id/:subid" do |id, subid|
+      sub = @forum.subtopic(id.to_i, subid.to_i)
+      slim :details, :locals => { :posts => sub.items }
     end
 
-    get "/content" do
-      slim :content
+    get "/post/:id" do |id|
+      post = @forum.post(id.to_i)
+      content = Kramdown::Document.new(post.content).to_html
+      slim :content, :locals => { :post => post, :content => content }
     end
 
     namespace '/api/v1' do

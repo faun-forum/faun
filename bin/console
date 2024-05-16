@@ -34,31 +34,31 @@ class OwlCli < Thor
     puts
 
     parts = meta["parts"] || {}
-    @forum.each do |name, topic|
-      if (part = parts[topic.id])
+    @forum.each do |id, topic|
+      if (part = parts[id])
         print part["name"].ljust(35).colorize(:light_green).underline if part["name"]
         print "\t", part["details"].colorize(:light_black) if part["details"]
         puts
       end
 
-      len = name.length + topic.id.to_s.length
-      print name.colorize(:light_yellow).bold
+      len = topic.name.length + topic.id.to_s.length
+      print topic.name.colorize(:light_yellow).bold
       print ('.' * (35 - len)).colorize(:light_black).bold
       print topic.id.to_s.colorize(:light_blue).italic
       print "\t", topic.meta["details"].colorize(:light_black) if topic.meta["details"]
       puts
 
       subparts = topic.meta["parts"] || {}
-      topic.each do |name, sub|
-        if (part = subparts[sub.id])
+      topic.each do |subid, sub|
+        if (part = subparts[subid])
           print "\t", (part["name"] || "").ljust(27, '-').colorize(:light_black).bold
           print "\t", part["details"].colorize(:light_black) if part["details"]
           puts
         end
 
-        id = "#{topic.id}.#{sub.id}"
-        len = name.length + id.length
-        print "\t", name
+        id = "#{topic.id}.#{subid}"
+        len = sub.name.length + id.length
+        print "\t", sub.name
         print ('.' * (27 - len)).colorize(:light_black)
         print id.colorize(:light_blue).italic
         print "\t", sub.meta["details"].colorize(:light_black) if sub.meta["details"]

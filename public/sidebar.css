@@ -23,7 +23,7 @@ main > header {
 }
 
 main > header, li {
-    font-family: "Slabo 27px", sans-serif;
+    font-family: "Roboto Slab", sans-serif;
 }
 
 main section:last-child {
@@ -39,11 +39,21 @@ h2, h3 > a, ol header, li > a {
 }
 
 h2, h3, h4 {
-    font-family: "Anton", "Impact", sans-serif;
+    font-family: "Alumni Sans", "Impact", sans-serif;
 }
 
 h2 {
     color: #ff8b8b;
+    font-size: xxx-large;
+}
+
+h3 {
+    font-size: xx-large;
+}
+
+h4 {
+    color: #666;
+    font-size: x-large;
 }
 
 hr {

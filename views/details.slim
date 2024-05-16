@@ -34,20 +34,14 @@ html
 
   body
     nav
-      h1 Initiation
+      h1 Publications
 
     main
       ul
-        li
-          a href="/content" target="content"
-            header 13 Degrees of Initiation
-            div
-              span.author Aiom Ominous
-              span.date 13 May 2024
-
-        li
-          a.selected href="/content" target="content"
-            header Khem: Sinister Hermetic Alchemy
-            div
-              span.author Aiom Ominous
-              span.date 23 Aug 2022
+        - posts.each do |id, post|
+          li
+            a href="/post/#{id}" target="content"
+              header =post.title
+              div
+                span.author =@forum.author_name(post.author)
+                span.date =post.meta["written"]

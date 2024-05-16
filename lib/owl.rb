@@ -10,10 +10,11 @@ module Owl
   class Error < StandardError; end
 
   class Section
-    attr_reader :id, :items
+    attr_reader :id, :name, :items
 
-    def initialize(id, path, type)
+    def initialize(id, name, path, type)
       @id = id
+      @name = name
 
       subs = {}
       Dir.each_child(path) do |section|
@@ -21,9 +22,10 @@ module Owl
         next unless File.directory?(dir) and not section.start_with?('.')
 
         name, _, id = section.rpartition(".@")
-        subs[name] = type.new(id.to_i, dir)
+        id = id.to_i
+        subs[id] = type.new(id, name, dir)
       end
-      @items = subs.sort_by { |_, sub| sub.id }.to_h
+      @items = subs.sort_by { |subid, _| subid }.to_h
     end
 
     def each(&block)
@@ -49,12 +51,12 @@ module Owl
   class SectionWithMeta < Section
     attr_reader :meta
 
-    def initialize(id, path, type)
-      super(id, path, type)
+    def initialize(id, name, path, type)
+      super(id, name, path, type)
 
       Async do
         begin
-          File.open(File.join(path, "meta.yaml"), "r") do |file|
+          File.open(File.join(path, "meta.yaml"), "r:UTF-8") do |file|
             generic = Async::IO::Stream.new(file)
             @meta = YAML.load(generic.read)
           end
@@ -66,8 +68,26 @@ module Owl
   end
 
   class Forum < SectionWithMeta
+    attr_reader :posts
+
     def initialize(path)
-      super(0, path, Topic)
+      super(0, nil, path, Topic)
+
+      @posts = @items.flat_map do |_, topic|
+        topic.posts.to_a
+      end.to_h
+    end
+
+    def author_name(nick)
+      @meta["authors"][nick] || nick
+    end
+
+    def subtopic(id, subid)
+      @items[id].subtopic(subid)
+    end
+
+    def post(id)
+      @posts[id]
     end
 
     def item_name
@@ -76,8 +96,18 @@ module Owl
   end
 
   class Topic < SectionWithMeta
-    def initialize(id, path)
-      super(id, path, Subtopic)
+    attr_reader :posts
+
+    def initialize(id, name, path)
+      super(id, name, path, Subtopic)
+
+      @posts = @items.flat_map do |_, sub|
+        sub.posts.to_a
+      end.to_h
+    end
+
+    def subtopic(subid)
+      @items[subid]
     end
 
     def item_name
@@ -86,8 +116,12 @@ module Owl
   end
 
   class Subtopic < SectionWithMeta
-    def initialize(id, path)
-      super(id, path, Post)
+    def initialize(id, name, path)
+      super(id, name, path, Post)
+    end
+
+    def posts
+      @items
     end
 
     def item_name
@@ -98,19 +132,27 @@ module Owl
   class Post < Section
     attr_reader :id, :meta, :content
 
-    def initialize(id, path)
-      super(id, path, ForumThread)
+    def initialize(id, name, path)
+      super(id, name, path, ForumThread)
       Async do
-        File.open(File.join(path, "latest.md"), "r") do |file|
+        File.open(File.join(path, "latest.md"), "r:UTF-8") do |file|
           generic = Async::IO::Stream.new(file)
           lines = Async::IO::Protocol::Line.new(generic).each_line
           lines.next
           meta = lines.take_while { |line| line.strip != "---" }.join("\n")
           # lines.next while lines.peek.strip.empty?
           @meta = YAML.load(meta)
-          @content = generic.read
+          @content = generic.read.force_encoding("UTF-8")
         end
       end
+    end
+
+    def title
+      @name
+    end
+
+    def author
+      @meta["author"]
     end
 
     def item_name
@@ -129,8 +171,8 @@ module Owl
   end
 
   class ForumThread < Section
-    def initialize(id, path)
-      super(id, path, NilClass)
+    def initialize(id, name, path)
+      super(id, name, path, NilClass)
     end
 
     def item_name

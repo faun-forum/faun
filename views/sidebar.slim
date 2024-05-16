@@ -25,18 +25,18 @@ html
       h1 Contents
 
     main
-      - @forum.each do |name, topic|
-        - if (part = (@forum.meta['parts'] || {})[topic.id])
+      - @forum.each do |id, topic|
+        - if (part = (@forum.meta['parts'] || {})[id])
           header title=part['details']
             h2 =part['name']
             hr
         section
-          h3(title=topic.meta['details']): a[href="/posts/#{topic.id}" target="details"] =name
+          h3(title=topic.meta['details']): a[href="/posts/#{id}" target="details"] =topic.name
           ol
-            - topic.each do |subname, sub|
-              - if (subpart = (topic.meta['parts'] || {})[sub.id])
+            - topic.each do |subid, sub|
+              - if (subpart = (topic.meta['parts'] || {})[subid])
                 header title=subpart['details']
                   - if subpart['name']
                     h4 =subpart['name']
                   hr
-              li(title=sub.meta['details']): a[href="/posts/#{topic.id}/#{sub.id}" target="details"] =subname
+              li(title=sub.meta['details']): a[href="/posts/#{id}/#{subid}" target="details"] =sub.name
