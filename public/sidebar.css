@@ -17,7 +17,7 @@ div + div > h3 {
 }
 
 header, h3, li {
-    font-family: "Slabo 27px", serif;
+    font-family: "Slabo 27px", sans-serif;
     padding: 0.4rem 0.5rem;
 }
 
