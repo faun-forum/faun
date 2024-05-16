@@ -7,7 +7,7 @@ require "colorize"
 require "thor"
 
 # You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
+# with your gem easier. You can also use a different owl, if you like.
 
 class OwlCli < Thor
   class_option :forum, type: :string, aliases: "-n", desc: "Forum name"
@@ -19,8 +19,8 @@ class OwlCli < Thor
     @forum = Owl::Forum.new("/var/lib/owl/#{options[:forum]}") if options[:forum]
   end
 
-  desc "topics", "List forum topics"
-  def topics
+  desc "contents", "List forum topics"
+  def contents
     if @json
       puts JSON(@forum)
       return
@@ -69,6 +69,26 @@ class OwlCli < Thor
         # end
       end
       puts
+    end
+  end
+
+  desc "article", "print specific article"
+  def article(id)
+    post = @forum.post(id.to_i)
+    if @json
+      puts post.to_json
+    else
+      puts post.title.colorize(:light_yellow).bold
+      puts "#{'Author:'.colorize(:light_black)} #{post.author.colorize(:light_blue).italic}"
+      puts "#{'Written:'.colorize(:light_black)} #{post.meta["written"].colorize(:light_black)}"
+      puts
+      puts post.content
+      puts
+      puts "Threads:".colorize(:light_black)
+      puts "no replies".colorize(:light_black).italic if (post.threads || {}).empty?
+      post.threads.each do |tid, thread|
+        puts "#{tid.to_s.colorize(:light_black)} #{thread.title.colorize(:light_green)} by #{thread.authors.join(', ').colorize(:light_blue).italic}"
+      end
     end
   end
 end
