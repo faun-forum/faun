@@ -82,6 +82,10 @@ module Owl
       @meta["authors"][nick] || nick
     end
 
+    def topic(id)
+      @items[id]
+    end
+
     def subtopic(id, subid)
       @items[id].subtopic(subid)
     end

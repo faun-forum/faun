@@ -39,4 +39,8 @@ html
                   - if subpart['name']
                     h4 =subpart['name']
                   hr
-              li(title=sub.meta['details']): a[href="/posts/#{id}/#{subid}" target="details"] =sub.name
+              li(title=sub.meta['details'])
+                a[href="/posts/#{id}/#{subid}" target="details"]
+                  =sub.name
+                  - unless sub.posts.empty?
+                    span.count =sub.posts.count

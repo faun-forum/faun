@@ -76,17 +76,22 @@ ol {
 }
 
 li > a, h3 > a {
-    display: block;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 li > a:hover, h3 > a:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-li > a:active, h3 > a:active {
-    background-color: rgba(255, 255, 255, 0.2);
+li > a:active, h3 > a:active, li > a.selected, h3 > a.selected {
+    background-color: #1e1f22;
 }
 
-li > a.selected, h3 > a.selected {
-    background-color: rgba(255, 0, 0, 0.2);
+li span.count {
+    text-align: right;
+    font-family: sans-serif;
+    font-size: x-small;
+    color: #666;
 }

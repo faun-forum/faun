@@ -16,11 +16,7 @@ li > a:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-li > a:active {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-li > a.selected {
+li > a:active, li > a.selected {
     background-color: rgba(255, 0, 0, 0.2);
 }
 
@@ -42,4 +38,11 @@ li .author {
 
 li > a > header + div {
     margin-top: 1em;
+}
+
+.empty {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    margin: 2em;
 }

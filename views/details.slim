@@ -37,6 +37,9 @@ html
       h1 Publications
 
     main
+      - if posts.empty?
+        .empty No posts here yet
+
       ul
         - posts.each do |id, post|
           li

@@ -41,8 +41,11 @@ article h6 {
 }
 
 article p {
-    padding: 1em 0;
     text-align: justify;
+}
+
+main :not(li) > p {
+    padding: 1em 0;
 }
 
 article header + p:first-of-type::first-letter {

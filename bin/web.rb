@@ -37,13 +37,22 @@ module OwlApi
       redirect 'index.html'
     end
 
-    get "/sidebar" do
+    get "/contents" do
       slim :sidebar
+    end
+
+    get "/posts" do
+      slim :details, :locals => { :posts => @forum.posts }
+    end
+
+    get "/posts/:id" do |id|
+      topic = @forum.topic(id.to_i)
+      slim :details, :locals => { :posts => topic.posts }
     end
 
     get "/posts/:id/:subid" do |id, subid|
       sub = @forum.subtopic(id.to_i, subid.to_i)
-      slim :details, :locals => { :posts => sub.items }
+      slim :details, :locals => { :posts => sub.posts }
     end
 
     get "/post/:id" do |id|
