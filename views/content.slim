@@ -8,20 +8,60 @@ html
     link rel="stylesheet" href="/content.css"
 
     css:
+      body {
+          display: flex;
+          height: 100%;
+          width: 100%;
+          position: absolute;
+      }
+
+      main {
+          flex: 1;
+      }
+
+      aside {
+          flex: 0 0 15rem;
+          width: 15rem;
+      }
+
+      aside > nav {
+          left: auto;
+          right: 0;
+          width: 15rem;
+      }
+
+      aside > section {
+          padding-top: 32pt;
+          overflow-y: auto;
+          height: calc(100vh - 32pt);
+          position: relative;
+          z-index: 0;
+      }
+
       article {
+          min-width: 20em;
           max-width: 55em;
           margin-left: auto;
           margin-right: auto;
+          padding-left: 2em;
+          padding-right: 2em;
       }
 
   body
-    nav
-      h1 Article
-
     main
+      nav: h1 Article
       article
         header
           h1 =post.title
           p.author #{@forum.author_name(post.author)}, #{post.meta["written"]}
 
         ==content
+
+    aside
+      nav: h1 Discussions
+      section#discussion
+        ul
+          - post.threads.each do |tid, thread|
+            li: a[href="/post/#{post.id}/thread/#{tid}" target="comments"]
+              =thread.title
+              span.count =thread.comments.count

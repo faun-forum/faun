@@ -112,3 +112,57 @@ article td {
 article tr:nth-child(even) {
     background-color: rgba(0, 0, 0, 0.2);
 }
+
+/*
+ * Discussions
+ */
+
+#discussion {
+    background-color: #181818;
+}
+
+#discussion a, aside a:hover, #discussion a:visited, #discussion a:active {
+    color: white;
+    text-decoration: none;
+}
+
+#discussion li {
+    border-bottom: 1px dotted #666;
+}
+
+#discussion li > a:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#discussion li > a:active, #discussion li > a.selected {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+#discussion li > a {
+    font-family: "Alumni Sans", sans-serif;
+    font-size: larger;
+}
+
+#discussion li > a {
+    padding: 1rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#discussion li > a span.count {
+    text-align: center;
+    font-family: sans-serif;
+    font-size: x-small;
+    font-weight: bold;
+
+    display: inline-block;
+    width: 13pt;
+    height: 13pt;
+    line-height: 13pt;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #222;
+    color: #888;
+}

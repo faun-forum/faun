@@ -1,5 +1,5 @@
 body {
-    background-color: #1e1f22;
+    background-color: #222;
     color: white;
 }
 
@@ -38,11 +38,4 @@ li .author {
 
 li > a > header + div {
     margin-top: 1em;
-}
-
-.empty {
-    color: #666;
-    font-style: italic;
-    text-align: center;
-    margin: 2em;
 }

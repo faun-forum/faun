@@ -75,18 +75,18 @@ ol {
     margin-left: 1rem;
 }
 
-li > a, h3 > a {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 li > a:hover, h3 > a:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
 li > a:active, h3 > a:active, li > a.selected, h3 > a.selected {
     background-color: #1e1f22;
+}
+
+li > a, h3 > a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 li span.count {

@@ -12,3 +12,10 @@ nav h1 {
     font-size: xxx-large;
     text-transform: uppercase;
 }
+
+.empty {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    margin: 2em;
+}
