@@ -159,6 +159,10 @@ module Owl
       @meta["author"]
     end
 
+    def threads
+      @items
+    end
+
     def item_name
       "threads"
     end
@@ -168,7 +172,7 @@ module Owl
       json.merge!(
         id: @id,
         content: @content,
-        threads: @threads
+        threads: @items
       )
       json.to_json(*args)
     end
@@ -176,14 +180,77 @@ module Owl
 
   class ForumThread < Section
     def initialize(id, name, path)
-      super(id, name, path, NilClass)
+      @id = id
+      @name = name
+
+      comments = {}
+      Dir.each_child(path) do |filename|
+        file = File.join(path, filename)
+        next if File.directory?(file) or filename.start_with?('.') or not filename.end_with?('.md')
+
+        id, author, date_string = filename.scan(/^(\d{3})\.(\w+)\.(20\d\d-\d\d-\d\d\.\d\d-\d\d)\.md$/).first
+        id = id.to_i
+        datetime = DateTime.strptime(date_string, "%Y-%m-%d.%H-%M")
+
+        content = nil
+        Async do
+          begin
+            File.open(file, "r:UTF-8") do |file|
+              generic = Async::IO::Stream.new(file)
+              content = generic.read
+            end
+          rescue
+            content = ""
+          end
+        end.wait
+
+        comments[id] = Comment.new(id, author, datetime, content)
+      end
+      @items = comments.sort_by { |id, _| id }.to_h
+    end
+
+    def title
+      @name
+    end
+
+    def comments
+      @items
+    end
+
+    def authors
+      @items.values.map(&:author).uniq
     end
 
     def item_name
       "comments"
     end
+
+    def to_json(*args)
+      {
+        :id => id,
+        :title => @name,
+        :comments => @items
+      }.to_json
+    end
   end
 
   class Comment
+    attr_reader :id, :author, :created, :content
+
+    def initialize(id, author, created, content)
+      @id = id
+      @author = author
+      @created = created
+      @content = content
+    end
+
+    def to_json(*args)
+      {
+        :id => id,
+        :author => @author,
+        :created => @created,
+        :content => @content
+      }.to_json
+    end
   end
 end
