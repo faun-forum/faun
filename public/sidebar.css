@@ -8,9 +8,35 @@ body {
     color: white;
 }
 
+a {
+    border-top-left-radius: 0.3em;
+    border-bottom-left-radius: 0.3em;
+}
+
+a, ol header, main header {
+    border-right-width: 1px;
+    border-right-color: rgba(255, 0, 0, 0.2);
+    border-style: solid;
+}
+
 a, a:hover, a:visited, a:active {
     color: white;
     text-decoration: none;
+}
+
+a:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+a:active {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+a.active {
+    border-width: 1px;
+    border-color: rgba(255, 0, 0, 0.2);
+    border-right-color: transparent;
+    background-color: #222;
 }
 
 /*
@@ -18,8 +44,7 @@ a, a:hover, a:visited, a:active {
  */
 
 main > header {
-    margin-top: 1rem !important;
-    width: calc(100% - 0.5rem);
+    padding-top: 1rem !important;
 }
 
 main > header, li {
@@ -30,8 +55,8 @@ main section:last-child {
     margin-bottom: 6rem;
 }
 
-section + section > h3 {
-    margin-top: 0.5rem;
+section + section > h3 > a {
+    padding-top: 0.9rem;
 }
 
 h2, h3 > a, ol header, li > a {

@@ -31,7 +31,8 @@ html
             h2 =part['name']
             hr
         section
-          h3(title=topic.meta['details']): a[href="/topics/#{id}/" target="details"] =topic.name
+          - attrs = (id.to_s == active) ? { class: "active" } : { }
+          h3(title=topic.meta['details']): a[href="/?topic=#{id}" target="_parent" *attrs] =topic.name
           ol
             - topic.each do |subid, sub|
               - if (subpart = (topic.meta['parts'] || {})[subid])
@@ -40,7 +41,8 @@ html
                     h4 =subpart['name']
                   hr
               li(title=sub.meta['details'])
-                a[href="/topics/#{id}/#{subid}/" target="details"]
+                - attrs = ("#{id}.#{subid}" == active) ? { class: "active" } : { }
+                a[href="/?topic=#{id}.#{subid}" target="_parent" *attrs]
                   =sub.name
                   - unless sub.posts.empty?
                     span.count =sub.posts.count

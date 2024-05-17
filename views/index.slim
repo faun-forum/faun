@@ -1,0 +1,39 @@
+doctype html
+html
+  head
+    title =@forum.seo["title"]
+    meta name="description" content="#{@forum.seo["description"]}"
+    meta name="robots" content="#{@forum.seo["robots"]}"
+
+    meta charset="UTF-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    link rel="stylesheet" href="/wipe.css"
+    link rel="stylesheet" href="/index.css"
+
+    css:
+      body {
+          margin: 0
+      }
+      #forum {
+          display: flex;
+          height: 100%;
+          width: 100%;
+          position: absolute;
+      }
+      #sidebar {
+          width: 15rem;
+          flex: 0;
+      }
+      #details {
+          width: 16rem;
+          flex: 0;
+      }
+      #content {
+          flex: 1;
+      }
+
+  body
+    #forum
+      iframe#sidebar name="sidebar" src="/topics/#{active[:topic]&.clone&.prepend('?active=')}"
+      iframe#details name="details" src="#{active[:topic] ? active[:topic].clone.sub('.', '/').concat('/').prepend('/topics/') : '/posts/'}#{active[:post]&.to_s&.prepend('?post=')}"
+      iframe#content name="content" src="/posts/#{active[:post]}/"

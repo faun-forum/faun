@@ -69,7 +69,7 @@ module Faun
   end
 
   class Forum < SectionWithMeta
-    attr_reader :posts
+    attr_reader :posts, :seo, :defaults
 
     def initialize(path)
       super(0, nil, path, Topic)
@@ -79,8 +79,23 @@ module Faun
       end.to_h
     end
 
+    def seo
+      @meta["seo"] || {}
+    end
+
+    def defaults
+      @meta["defaults"] || {}
+    end
+
     def author_name(nick)
       @meta["authors"][nick] || nick
+    end
+
+    def topic_from(path)
+      id, subid = path.split('.')
+      topic = @items[id.to_i]
+      topic = topic.subtopic(subid.to_i) if subid
+      topic
     end
 
     def topic(id)
