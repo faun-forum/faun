@@ -8,11 +8,9 @@ Gem::Specification.new do |spec|
   spec.authors = ["Dr Maxim Orlovsky"]
   spec.email = ["dr@orlovsky.ch"]
 
-  spec.summary = "Portable forum backend"
+  spec.summary = "Self-hosted directory-based forum and asset catalog for small communities"
   spec.homepage = "https://github.com/faun-forum/faun"
   spec.required_ruby_version = ">= 3.0.0"
-
-  spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/faun-forum/faun"
