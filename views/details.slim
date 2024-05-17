@@ -47,4 +47,4 @@ html
               header =post.title
               div
                 span.author =@forum.author_name(post.author)
-                span.date =post.meta["written"]
+                span.date =post.meta["written"].strftime("%d %b %Y")

@@ -61,6 +61,18 @@ module OwlApi
       slim :content, :locals => { :post => post, :content => content }
     end
 
+    get "/post/:id/thread" do |id|
+      post = @forum.post(id.to_i)
+      thread = post.threads.values.first
+      slim :thread, :locals => { :thread => thread }
+    end
+
+    get "/post/:id/thread/:tid" do |id, tid|
+      post = @forum.post(id.to_i)
+      thread = post.threads[tid.to_i]
+      slim :thread, :locals => { :thread => thread }
+    end
+
     namespace '/api/v1' do
       before do
         content_type :json

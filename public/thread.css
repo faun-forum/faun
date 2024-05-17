@@ -1,0 +1,38 @@
+body {
+    background-color: #181818;
+    color: white;
+}
+
+section {
+    font-family: "Roboto Slab", sans-serif;
+    font-size: 85%;
+    line-height: 1.6;
+}
+
+section header {
+    font-family: serif;
+    font-weight: lighter;
+    font-size: small;
+    color: #888;
+    padding: 2pt 0.5rem 0 0.5rem;
+
+    opacity: 0.8;
+    border-top: 4pt solid #222;
+    background-size: 10px 100%;
+}
+
+.author {
+    font-style: italic;
+    color: #ff8b8b;
+}
+
+.date {
+}
+
+.comment {
+    padding: 0 0.5rem 1rem 0.5rem;
+}
+
+.comment p {
+    padding: 0.5em 0;
+}

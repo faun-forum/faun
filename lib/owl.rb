@@ -146,6 +146,7 @@ module Owl
           meta = lines.take_while { |line| line.strip != "---" }.join("\n")
           # lines.next while lines.peek.strip.empty?
           @meta = YAML.load(meta)
+          @meta["written"] = DateTime.strptime(@meta["written"], "%Y-%m-%d %H:%M")
           @content = generic.read.force_encoding("UTF-8")
         end
       end.wait
@@ -197,7 +198,7 @@ module Owl
           begin
             File.open(file, "r:UTF-8") do |file|
               generic = Async::IO::Stream.new(file)
-              content = generic.read
+              content = generic.read.force_encoding("UTF-8")
             end
           rescue
             content = ""
@@ -242,6 +243,10 @@ module Owl
       @author = author
       @created = created
       @content = content
+    end
+
+    def markdown_content
+      Kramdown::Document.new(@content).to_html
     end
 
     def to_json(*args)

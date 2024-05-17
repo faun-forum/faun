@@ -15,19 +15,29 @@ html
           position: absolute;
       }
 
+      nav {
+          right: 35rem;
+          width: auto;
+      }
+
       main {
           flex: 1;
       }
 
       aside {
-          flex: 0 0 15rem;
-          width: 15rem;
+          flex: 0 0 13rem;
+          width: 13rem;
+      }
+
+      iframe {
+          flex: 0 0 22rem;
+          width: 22rem;
       }
 
       aside > nav {
           left: auto;
-          right: 0;
-          width: 15rem;
+          right: 22rem;
+          width: 13rem;
       }
 
       aside > section {
@@ -53,15 +63,20 @@ html
       article
         header
           h1 =post.title
-          p.author #{@forum.author_name(post.author)}, #{post.meta["written"]}
+          p.author #{@forum.author_name(post.author)}, #{post.meta["written"].strftime("%d %b %Y, %I:%M %p")}
 
         ==content
 
     aside
       nav: h1 Discussions
       section#discussion
+        - if post.threads.empty?
+          .empty No discussions yet
+
         ul
           - post.threads.each do |tid, thread|
             li: a[href="/post/#{post.id}/thread/#{tid}" target="comments"]
               =thread.title
               span.count =thread.comments.count
+
+    iframe name="comments" src="/post/#{post.id}/thread"

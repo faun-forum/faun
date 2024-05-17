@@ -1,0 +1,32 @@
+doctype html
+html
+  head
+    title Post Content
+    link rel="stylesheet" href="/wipe.css"
+    link rel="stylesheet" href="/main-layout.css"
+    link rel="stylesheet" href="/main-style.css"
+    link rel="stylesheet" href="/thread.css"
+
+    css:
+        li header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        li header .date {
+            text-align: right;
+        }
+
+  body
+    nav: h1 Comments
+    main
+      - if thread.comments.empty?
+        .empty No comments yet
+
+      ol
+        - thread.comments.each do |cid, comment|
+          li: section
+            header
+              span.author =@forum.author_name(comment.author)
+              span.date =comment.created.strftime("%d %b %Y, %I:%M %p")
+            .comment ==comment.markdown_content
