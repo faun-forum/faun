@@ -2,12 +2,13 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "faun"
 require "sinatra"
 require "sinatra/json"
 require "sinatra/namespace"
 require "kramdown"
 require "logger"
+
+require_relative "../lib/faun"
 
 module FaunWeb
   class App < Sinatra::Base
