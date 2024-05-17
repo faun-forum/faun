@@ -36,3 +36,37 @@ section header {
 .comment p {
     padding: 0.5em 0;
 }
+
+.comment blockquote {
+    border-left: 3pt solid #333;
+    padding-left: 0.5em;
+    margin: 0.5em 0;
+    color: #888;
+    font-style: italic;
+}
+
+.comment blockquote > p:first-of-type {
+    padding: 0;
+}
+
+.comment p + ul, .comment p + ol {
+    margin-top: -0.5em;
+}
+
+.comment ul {
+    list-style-type: disc;
+}
+
+.comment ol {
+    list-style-type: decimal;
+}
+
+.comment ol, .comment ul {
+    padding-left: 1em;
+    margin-bottom: 1em;
+}
+
+.comment li {
+    padding-top: 0.25em;
+    padding-bottom: 0.2em;
+}
