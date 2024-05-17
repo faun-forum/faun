@@ -2,21 +2,21 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "owl"
+require "faun"
 require "colorize"
 require "thor"
 
 # You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different owl, if you like.
+# with your gem easier. You can also use a different faun, if you like.
 
-class OwlCli < Thor
+class FaunCli < Thor
   class_option :forum, type: :string, aliases: "-n", desc: "Forum name"
   class_option :json, type: :boolean, aliases: "-j", desc: "Print out in JSON"
 
   def initialize(args = [], local_options = {}, config = {})
     super
     @json = options[:json] || false
-    @forum = Owl::Forum.new("/var/lib/owl/#{options[:forum]}") if options[:forum]
+    @forum = Faun::Forum.new("/var/lib/faun/#{options[:forum]}") if options[:forum]
   end
 
   desc "contents", "List forum topics"
@@ -93,4 +93,4 @@ class OwlCli < Thor
   end
 end
 
-OwlCli.start
+FaunCli.start

@@ -4,9 +4,9 @@ require "async/io/generic"
 require "async/io/protocol/line"
 require "yaml"
 
-require_relative "owl/version"
+require_relative "faun/version"
 
-module Owl
+module Faun
   class Error < StandardError; end
 
   class Section

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    owl (0.1.0)
+    faun (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -98,8 +98,8 @@ DEPENDENCIES
   async (~> 2.11)
   async-io (~> 1.11)
   colorize (~> 0.7)
+  faun!
   kramdown (~> 2.4)
-  owl!
   puma (~> 6.4)
   rackup (~> 2.1)
   rake (~> 13.0)

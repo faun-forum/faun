@@ -2,20 +2,20 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "owl"
+require "faun"
 require "sinatra"
 require "sinatra/json"
 require "sinatra/namespace"
 require "kramdown"
 require "logger"
 
-module OwlApi
+module FaunWeb
   class App < Sinatra::Base
     register Sinatra::Namespace
 
     def initialize
       super
-      @forum = Owl::Forum.new("/var/lib/owl/the13")
+      @forum = Faun::Forum.new("/var/lib/faun/the13")
     end
 
     configure do
@@ -104,4 +104,4 @@ module OwlApi
   end
 end
 
-OwlApi::App.run!
+FaunWeb::App.run!

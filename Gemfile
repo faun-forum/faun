@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in owl.gemspec
+# Specify your gem's dependencies in faun.gemspec
 gemspec
 
 gem "async", "~> 2.11"
