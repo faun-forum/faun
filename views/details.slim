@@ -43,7 +43,7 @@ html
       ul
         - posts.each do |id, post|
           li
-            a href="/post/#{id}/" target="content"
+            a href="/posts/#{id}/" target="content"
               header =post.title
               div
                 span.author =@forum.author_name(post.author)

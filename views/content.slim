@@ -77,8 +77,8 @@ html
 
         ul
           - post.threads.each do |tid, thread|
-            li: a[href="/post/#{post.id}/thread/#{tid}/" target="comments"]
+            li: a[href="/posts/#{post.id}/threads/#{tid}/" target="comments"]
               =thread.title
               span.count =thread.comments.count
 
-    iframe name="comments" src="/post/#{post.id}/thread/"
+    iframe name="comments" src="/posts/#{post.id}/threads/"

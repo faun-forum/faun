@@ -39,7 +39,7 @@ module FaunWeb
       redirect 'index.html'
     end
 
-    get "/contents/" do
+    get "/topics/" do
       slim :sidebar
     end
 
@@ -47,36 +47,36 @@ module FaunWeb
       slim :details, :locals => { :posts => @forum.posts }
     end
 
-    get "/posts/:id/" do |id|
+    get "/topics/:id/" do |id|
       topic = @forum.topic(id.to_i)
       slim :details, :locals => { :posts => topic.posts }
     end
 
-    get "/posts/:id/:subid/" do |id, subid|
+    get "/topics/:id/:subid/" do |id, subid|
       sub = @forum.subtopic(id.to_i, subid.to_i)
       slim :details, :locals => { :posts => sub.posts }
     end
 
-    get "/post/:id/" do |id|
+    get "/posts/:id/" do |id|
       post = @forum.post(id.to_i)
       content = Kramdown::Document.new(post.content).to_html
       slim :content, :locals => { :post => post, :content => content }
     end
 
-    get "/post/:id/assets/:name" do |id, name|
+    get "/posts/:id/assets/:name" do |id, name|
       post = @forum.post(id.to_i)
       asset_path = post.asset_path(name)
       content_type MIME::Types.type_for(asset_path).first.content_type
       send_file asset_path
     end
 
-    get "/post/:id/thread/" do |id|
+    get "/posts/:id/threads/" do |id|
       post = @forum.post(id.to_i)
       thread = post.threads.values.first
       slim :thread, :locals => { :thread => thread }
     end
 
-    get "/post/:id/thread/:tid/" do |id, tid|
+    get "/posts/:id/threads/:tid/" do |id, tid|
       post = @forum.post(id.to_i)
       thread = post.threads[tid.to_i]
       slim :thread, :locals => { :thread => thread }
@@ -87,8 +87,18 @@ module FaunWeb
         content_type :json
       end
 
-      get '/contents' do
+      get '/topics' do
         json @forum
+      end
+
+      get '/topics/:id' do |id|
+        topic = @forum.topic(id.to_i)
+        topic.posts.to_json
+      end
+
+      get '/topics/:id/:subid' do |id, subid|
+        sub = @forum.subtopic(id.to_i, subid.to_i)
+        sub.posts.to_json
       end
 
       get '/posts' do
@@ -96,16 +106,6 @@ module FaunWeb
       end
 
       get '/posts/:id' do |id|
-        topic = @forum.topic(id.to_i)
-        topic.posts.to_json
-      end
-
-      get '/posts/:id/:subid' do |id, subid|
-        sub = @forum.subtopic(id.to_i, subid.to_i)
-        sub.posts.to_json
-      end
-
-      get '/post/:id' do |id|
         post = @forum.post(id.to_i)
         post.to_json
       end
