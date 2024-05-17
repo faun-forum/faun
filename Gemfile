@@ -19,3 +19,5 @@ gem "kramdown", "~> 2.4"
 gem "rake", "~> 13.0"
 
 gem "rubocop", "~> 1.21"
+
+gem "mime-types", "~> 3.5"

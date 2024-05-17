@@ -6,6 +6,7 @@ require "sinatra"
 require "sinatra/json"
 require "sinatra/namespace"
 require "kramdown"
+require 'mime/types'
 require "logger"
 
 require_relative "../lib/faun"
@@ -38,37 +39,44 @@ module FaunWeb
       redirect 'index.html'
     end
 
-    get "/contents" do
+    get "/contents/" do
       slim :sidebar
     end
 
-    get "/posts" do
+    get "/posts/" do
       slim :details, :locals => { :posts => @forum.posts }
     end
 
-    get "/posts/:id" do |id|
+    get "/posts/:id/" do |id|
       topic = @forum.topic(id.to_i)
       slim :details, :locals => { :posts => topic.posts }
     end
 
-    get "/posts/:id/:subid" do |id, subid|
+    get "/posts/:id/:subid/" do |id, subid|
       sub = @forum.subtopic(id.to_i, subid.to_i)
       slim :details, :locals => { :posts => sub.posts }
     end
 
-    get "/post/:id" do |id|
+    get "/post/:id/" do |id|
       post = @forum.post(id.to_i)
       content = Kramdown::Document.new(post.content).to_html
       slim :content, :locals => { :post => post, :content => content }
     end
 
-    get "/post/:id/thread" do |id|
+    get "/post/:id/assets/:name" do |id, name|
+      post = @forum.post(id.to_i)
+      asset_path = post.asset_path(name)
+      content_type MIME::Types.type_for(asset_path).first.content_type
+      send_file asset_path
+    end
+
+    get "/post/:id/thread/" do |id|
       post = @forum.post(id.to_i)
       thread = post.threads.values.first
       slim :thread, :locals => { :thread => thread }
     end
 
-    get "/post/:id/thread/:tid" do |id, tid|
+    get "/post/:id/thread/:tid/" do |id, tid|
       post = @forum.post(id.to_i)
       thread = post.threads[tid.to_i]
       slim :thread, :locals => { :thread => thread }

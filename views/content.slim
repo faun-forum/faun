@@ -64,6 +64,8 @@ html
         header
           h1 =post.title
           p.author #{@forum.author_name(post.author)}, #{post.meta["written"].strftime("%d %b %Y, %I:%M %p")}
+          - if post.meta["note"]
+            p.note =post.meta["note"]
 
         ==content
 
@@ -75,8 +77,8 @@ html
 
         ul
           - post.threads.each do |tid, thread|
-            li: a[href="/post/#{post.id}/thread/#{tid}" target="comments"]
+            li: a[href="/post/#{post.id}/thread/#{tid}/" target="comments"]
               =thread.title
               span.count =thread.comments.count
 
-    iframe name="comments" src="/post/#{post.id}/thread"
+    iframe name="comments" src="/post/#{post.id}/thread/"

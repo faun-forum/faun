@@ -15,6 +15,7 @@ module Faun
     def initialize(id, name, path, type)
       @id = id
       @name = name
+      @path = path
 
       subs = {}
       Dir.each_child(path) do |section|
@@ -164,6 +165,10 @@ module Faun
       @items
     end
 
+    def asset_path(name)
+      "#{@path}/.assets/#{name}"
+    end
+
     def item_name
       "threads"
     end
@@ -183,6 +188,7 @@ module Faun
     def initialize(id, name, path)
       @id = id
       @name = name
+      @path = path
 
       comments = {}
       Dir.each_child(path) do |filename|
