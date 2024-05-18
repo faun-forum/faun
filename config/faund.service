@@ -1,0 +1,18 @@
+[Unit]
+Description=Faun forum
+After=network.target
+
+[Service]
+ExecStart=/home/orlovsky/faun/bin/faund
+WorkingDirectory=/home/orlovsky/faun
+Type=notify
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+User=root
+Group=root
+
+[Install]
+WantedBy=default.target
+RequiredBy=network.target
+
