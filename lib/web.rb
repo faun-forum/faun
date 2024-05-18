@@ -72,9 +72,13 @@ module FaunWeb
     get "/posts/:id/" do |id|
       post = @forum.post(id.to_i)
       content = Kramdown::Document.new(post.content).to_html
+      contents = params["contents"] == "true"
+      discussion = params["discussion"].nil? ? true : params["discussion"] == "true"
       slim :content, :locals => {
         :post => post,
         :content => content,
+        :contents => contents,
+        :discussion => discussion,
         :active => active_from(:thread) || post.threads.keys.first.to_s
       }
     end

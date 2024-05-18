@@ -15,11 +15,6 @@ html
           position: absolute;
       }
 
-      nav {
-          right: 35rem;
-          width: auto;
-      }
-
       main {
           flex: 1;
       }
@@ -57,9 +52,24 @@ html
           padding-right: 2em;
       }
 
+    - if discussion == true
+      css:
+        nav {
+            width: auto;
+            right: 35rem;
+        }
+
   body
     main
-      nav: h1 Article
+      nav
+        div
+          - if contents == true
+            a.button.i-sidebar-close-left href="/posts/#{post.id}/" target="_parent" &nbsp;
+          h1 Article
+        - if discussion == true
+          a.button.i-sidebar-close-right href="/posts/#{post.id}/?discussion=false&contents=#{contents}" target="_self" &nbsp;
+        - else
+          a.button.i-discussion href="/posts/#{post.id}/?contents=#{contents}" target="_self" &nbsp;
       article
         header
           h1 =post.title
@@ -69,18 +79,19 @@ html
 
         ==content
 
-    aside
-      nav: h1 Discussions
-      section#discussion
-        - if post.threads.empty?
-          .empty No discussions yet
+    - if discussion == true
+      aside
+        nav: h1 Discussions
+        section#discussion
+          - if post.threads.empty?
+            .empty No discussions yet
 
-        ol
-          - post.threads.each do |tid, thread|
-            - attrs = (tid.to_s == active) ? { class: "active" } : { }
-            li *attrs
-              a href="/posts/#{post.id}/?thread=#{tid}" target="_self"
-                =thread.title
-                span.count =thread.comments.count
+          ol
+            - post.threads.each do |tid, thread|
+              - attrs = (tid.to_s == active) ? { class: "active" } : { }
+              li *attrs
+                a href="/posts/#{post.id}/?thread=#{tid}" target="_self"
+                  =thread.title
+                  span.count =thread.comments.count
 
-    iframe name="comments" src="/posts/#{post.id}/threads/#{active&.concat('/')}"
+      iframe name="comments" src="/posts/#{post.id}/threads/#{active&.concat('/')}"
