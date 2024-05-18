@@ -4,4 +4,12 @@
 require_relative "../lib/web"
 require_relative "../lib/rest"
 
+module FaunWeb
+  class App
+    configure do
+      set :bind, '0.0.0.0'
+    end
+  end
+end
+
 FaunWeb::App.run!
