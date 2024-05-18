@@ -44,7 +44,7 @@ html
         - posts.each do |id, post|
           - attrs = (id.to_s == active) ? { class: "active" } : { }
           li *attrs
-            a href="/posts/#{id}/" target="content"
+            a href="/?post=#{id}#{topic&.prepend("&topic=")}" target="_parent"
               header =post.title
               div
                 span.author =@forum.author_name(post.author)
