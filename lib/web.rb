@@ -38,8 +38,8 @@ module FaunWeb
       }
       a.merge!(
         :thread =>  params["thread"],
-        :comment =>  params["comment"],
-        )
+        :comment =>  params["comment"]
+      )
       a[:post] = params["post"] || (
         a[:topic] ? @forum.topic_from(a[:topic]).posts.keys.first : @forum.defaults["post"]
       )
@@ -72,7 +72,11 @@ module FaunWeb
     get "/posts/:id/" do |id|
       post = @forum.post(id.to_i)
       content = Kramdown::Document.new(post.content).to_html
-      slim :content, :locals => { :post => post, :content => content }
+      slim :content, :locals => {
+        :post => post,
+        :content => content,
+        :active => active_from(:thread) || post.threads.keys.first.to_s
+      }
     end
 
     get "/posts/:id/assets/:name" do |id, name|

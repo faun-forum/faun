@@ -25,8 +25,10 @@ html
 
       ol
         - thread.comments.each do |cid, comment|
-          li: section
-            header
-              span.author =@forum.author_name(comment.author)
-              span.date =comment.created.strftime("%d %b %Y, %I:%M %p")
-            .comment ==comment.markdown_content
+          - attrs = (cid.to_s == active) ? { class: "active" } : { }
+          li *attrs
+            section
+              header
+                span.author &ndash; #{@forum.author_name(comment.author)}:
+                span.date =comment.created.strftime("%d %b %Y, %I:%M %p")
+              .comment ==comment.markdown_content

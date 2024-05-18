@@ -42,9 +42,9 @@ html
 
       ul
         - posts.each do |id, post|
-          li
-            - attrs = (id.to_s == active) ? { class: "active" } : { }
-            a href="/posts/#{id}/" target="content" *attrs
+          - attrs = (id.to_s == active) ? { class: "active" } : { }
+          li *attrs
+            a href="/posts/#{id}/" target="content"
               header =post.title
               div
                 span.author =@forum.author_name(post.author)

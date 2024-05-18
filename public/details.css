@@ -8,8 +8,22 @@ a, a:hover, a:visited, a:active {
     text-decoration: none;
 }
 
+ul {
+    padding-top: 0.5rem;
+    height: 100%;
+    box-shadow: inset -1px 0 0 rgba(255, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+li {
+    margin-left: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem 0 0 0.5rem;
+    overflow: hidden;
+}
+
 li > a {
-    padding: 1rem;
+    padding: 1rem 1rem 1rem 0.5rem;
 }
 
 li > a:hover {
@@ -20,8 +34,10 @@ li > a:active {
     background-color: rgba(255, 0, 0, 0.2);
 }
 
-li > a.active {
+li.active {
     background-color: #1e1e1e;
+    border-color: rgba(255, 0, 0, 0.2);
+    border-right-color: #1e1e1e;
 }
 
 li > a > header {

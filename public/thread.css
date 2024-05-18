@@ -14,11 +14,14 @@ section header {
     font-weight: lighter;
     font-size: small;
     color: #888;
-    padding: 2pt 0.5rem 0 0.5rem;
+    padding: 0.3rem 0.5rem 0.1rem 0.5rem;
 
-    opacity: 0.8;
-    border-top: 4pt solid #222;
-    background-size: 10px 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+li + li {
+    /* border-top: 1px dotted #333; */
 }
 
 .author {
@@ -27,10 +30,16 @@ section header {
 }
 
 .date {
+    font-size: smaller;
+    vertical-align: baseline;
 }
 
 .comment {
-    padding: 0 0.5rem 1rem 0.5rem;
+    margin-left: 0.5rem;
+    padding: 1px 0.5rem 1rem 0.5rem;
+    vertical-align: baseline;
+    background-color: #111;
+    border-radius: 0.5rem 0 0 0.5rem;
 }
 
 .comment p {
@@ -38,9 +47,10 @@ section header {
 }
 
 .comment blockquote {
+    font-size: smaller;
     border-left: 3pt solid #333;
     padding-left: 0.5em;
-    margin: 0.5em 0;
+    margin: 0.5rem 0;
     color: #888;
     font-style: italic;
 }

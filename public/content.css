@@ -128,7 +128,7 @@ article tr:nth-child(even) {
  */
 
 #discussion {
-    background-color: #181818;
+    background-color: #1e1e1e;
 }
 
 #discussion a, aside a:hover, #discussion a:visited, #discussion a:active {
@@ -136,16 +136,24 @@ article tr:nth-child(even) {
     text-decoration: none;
 }
 
+#discussion ol {
+    padding-top: 0.5rem;
+    height: 100%;
+    box-shadow: inset -1px 0 0 rgba(255, 0, 0, 0.2);
+    overflow: hidden;
+}
+
 #discussion li {
-    border-bottom: 1px dotted #666;
+    margin-left: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem 0 0 0.5rem;
+    overflow: hidden;
 }
 
-#discussion li > a:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-#discussion li > a:active, #discussion li > a.selected {
-    background-color: rgba(255, 0, 0, 0.2);
+#discussion li.active {
+    background-color: #181818;
+    border-color: rgba(255, 0, 0, 0.2);
+    border-right-color: #181818;
 }
 
 #discussion li > a {
@@ -154,11 +162,19 @@ article tr:nth-child(even) {
 }
 
 #discussion li > a {
-    padding: 1rem;
+    padding: 1rem 1rem 1rem 0.5rem;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+#discussion li > a:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#discussion li > a:active {
+    background-color: rgba(255, 0, 0, 0.2);
 }
 
 #discussion li > a span.count {
