@@ -44,7 +44,6 @@ html
         - posts.each do |id, post|
           li
             - attrs = (id.to_s == active) ? { class: "active" } : { }
-            - puts active
             a href="/posts/#{id}/" target="content" *attrs
               header =post.title
               div
