@@ -87,6 +87,11 @@ html
         header
           h1 =post.title
           p.author #{forum.author_name(post.author)}, #{post.meta["written"].strftime("%d %b %Y, %I:%M %p")}
+          - if post.meta["label"] == "llm"
+            p.warning
+              | This is a dialog with a large language model. It certainly contains misinformation and
+                must be read without trust. Using information from the answers without doing own research
+                on the topic is strictly not advised.
           - if post.meta["note"]
             p.note =post.meta["note"]
 
