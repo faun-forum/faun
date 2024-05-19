@@ -57,16 +57,28 @@ module FaunWeb
 
     get "/topics/:id/" do |id|
       topic = @forum.topic(id.to_i)
-      slim :details, :locals => { :posts => topic.posts, :active => active_from(:post), :topic => "#{id}" }
+      slim :details, :locals => {
+        :posts => topic.posts,
+        :active => active_from(:post),
+        :topic => topic
+      }
     end
 
     get "/topics/:id/:subid/" do |id, subid|
       sub = @forum.subtopic(id.to_i, subid.to_i)
-      slim :details, :locals => { :posts => sub.posts, :active => active_from(:post), :topic => "#{id}.#{subid}" }
+      slim :details, :locals => {
+        :posts => sub.posts,
+        :active => active_from(:post),
+        :topic => sub
+      }
     end
 
     get "/posts/" do
-      slim :details, :locals => { :posts => @forum.posts, :active => active_from(:post), :topic => nil }
+      slim :details, :locals => {
+        :posts => @forum.posts,
+        :active => active_from(:post),
+        :topic => nil
+      }
     end
 
     get "/posts/:id/" do |id|
