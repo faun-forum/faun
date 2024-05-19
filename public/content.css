@@ -197,6 +197,7 @@ article {
     height: 100%;
     box-shadow: inset -1px 0 0 rgba(255, 0, 0, 0.2);
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 #discussion li {

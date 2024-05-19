@@ -106,13 +106,13 @@ module FaunWeb
       content = Kramdown::Document.new(post.content).to_html
       contents = params["contents"] == "true"
       discussion = params["discussion"].nil? ? true : params["discussion"] == "true"
-      discussion = false if post.threads.empty?
       slim :content, :locals => {
         :post => post,
         :topic => "#{post.parent[:topic]}.#{post.parent[:subtopic]}",
         :content => content,
         :contents => contents,
         :discussion => discussion,
+        :comment => post.threads.empty?,
         :active => active_from(:thread) || post.threads.keys.first.to_s
       }
     end
@@ -128,6 +128,20 @@ module FaunWeb
       post = forum.post(id.to_i)
       thread = post.threads.values.first
       slim :thread, :locals => { :thread => thread, :active => active_from(:thread) }
+    end
+
+    get "/posts/:id/threads/new/" do |id|
+      slim :comment, :locals => { :post => id, :thread => nil }
+    end
+
+    get "/posts/:id/threads/:tid/reply/" do |id, tid|
+      slim :comment, :locals => { :post => id, :thread => tid }
+    end
+
+    post "/posts/:id/threads/" do |id|
+      post = forum.post(id.to_i)
+      thread = post.reply(id.to_i, username, params['name'], params['text'])
+      redirect to("/posts/#{id}/threads/#{thread.id}/#comment-1")
     end
 
     get "/posts/:id/threads/:tid/" do |id, tid|

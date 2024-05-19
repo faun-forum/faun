@@ -26,7 +26,10 @@ html
         }
 
   body
-    nav: h1 Comments
+    nav
+      h1 Comments
+      - if !!thread
+        a.button.i-reply href="/posts/#{thread.parent[:post]}/threads/#{thread.id}/reply/" target="_self" &nbsp;
     main
       - if not thread or thread.comments.empty?
         .empty No comments yet

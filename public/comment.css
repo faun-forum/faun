@@ -1,5 +1,5 @@
 body {
-    background-color: #1e1e1e;
+    background-color: #181818;
     color: white;
     font-family: "Roboto Slab", sans-serif;
 }
@@ -9,13 +9,6 @@ main {
     flex-direction: column;
     height: 100vh;
     box-sizing: border-box;
-
-    min-width: 20em;
-    max-width: 55em;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 2em;
-    padding-right: 2em;
 }
 
 input[type="submit"] {
@@ -25,29 +18,28 @@ input[type="submit"] {
 }
 
 input[type="text"], textarea {
-    background-color: #1e1e1e;
+    background-color: #181818;
     display: block;
     width: 100%;
     border: none;
     margin: 0;
-    padding: 0;
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
 input[type="text"]:focus, textarea:focus {
     outline: none;
 }
 
-input#title {
+input#name {
     font-family: "Alumni Sans", "Impact", sans-serif;
-    font-weight: bold;
-    padding-top: 1rem;
-    font-size: 500%;
-    line-height: 0.8;
+    font-size: larger;
 }
 
 textarea {
     flex-grow: 1;
     border: none;
     font-family: "Roboto Slab", sans-serif;
+    font-size: 85%;
     line-height: 1.6;
 }

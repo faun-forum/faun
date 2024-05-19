@@ -1,0 +1,24 @@
+doctype html
+html
+  head
+    title Reply
+
+    meta name="application" content="Faun"
+    meta name="theme-color" content="#1e1e1e"
+    meta name="color-scheme" content="dark"
+    meta name="robots" content="noindex, nofollow"
+
+    link rel="stylesheet" href="/wipe.css"
+    link rel="stylesheet" href="/main-layout.css"
+    link rel="stylesheet" href="/main-style.css"
+    link rel="stylesheet" href="/comment.css"
+
+  body
+    form method="post" target="_self" action="/posts/#{post}/threads/#{thread&.concat('/')}"
+      nav
+        h1 Reply
+        input.button.i-submit type="submit" value=""
+      main
+        - if thread.nil?
+          input type="text" id="name" name="name" placeholder="Discussion title" required=true
+        textarea id="text" name="text" placeholder="Write your reply" required=true

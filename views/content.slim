@@ -61,16 +61,23 @@ html
           max-width: 55em;
           margin-left: auto;
           margin-right: auto;
-          padding-left: 2em;
-          padding-right: 2em;
+          padding-left: 5em;
+          padding-right: 5em;
       }
 
     - if discussion == true
-      css:
-        nav {
-            width: auto;
-            right: 35rem;
-        }
+      - if comment == true
+        css:
+            nav {
+                width: auto;
+                right: 22rem;
+            }
+      - else
+        css:
+          nav {
+              width: auto;
+              right: 35rem;
+          }
 
   body
     main
@@ -100,18 +107,22 @@ html
         ==content
 
     - if discussion == true
-      aside
-        nav: h1 Discussions
-        section#discussion
-          - if post.threads.empty?
-            .empty No discussions yet
+      - if comment == true
+        iframe name="comments" src="/posts/#{post.id}/threads/new/"
+      - else
+        aside
+          nav
+            h1 Discuss
+            a.button.i-add href="/posts/#{post.id}/threads/new/" target="comments" &nbsp;
+          section#discussion
+            - if post.threads.empty?
+              .empty No discussions yet
 
-          ol
-            - post.threads.each do |tid, thread|
-              - attrs = (tid.to_s == active) ? { class: "active" } : { }
-              li *attrs
-                a href="/posts/#{post.id}/?thread=#{tid}" target="_self"
-                  =thread.title
-                  span.count =thread.comments.count
-
-      iframe name="comments" src="/posts/#{post.id}/threads/#{active&.dup&.concat('/')}"
+            ol
+              - post.threads.each do |tid, thread|
+                - attrs = (tid.to_s == active) ? { class: "active" } : { }
+                li *attrs
+                  a href="/posts/#{post.id}/?thread=#{tid}" target="_self"
+                    =thread.title
+                    span.count =thread.comments.count
+        iframe name="comments" src="/posts/#{post.id}/threads/#{active&.dup&.concat('/')}"
