@@ -12,7 +12,7 @@ module Faun
   class Error < StandardError; end
 
   class Section
-    attr_reader :id, :name, :items, :parent
+    attr_reader :id, :name, :items, :parent, :path
 
     def initialize(id, name, path, parent)
       @id = id
@@ -104,7 +104,8 @@ module Faun
       @name = @meta["name"]
       @meta.delete("name")
 
-      @posts = @items.flat_map { |_, topic| topic.posts.to_a }.sort_by { |id, _| id }.reverse.to_h
+      @posts = @items.flat_map { |_, topic| topic.posts.to_a }
+      sort_posts!
     end
 
     def seo; @meta["seo"] || {}; end
@@ -122,8 +123,25 @@ module Faun
     def subtopic(id, subid); @items[id].subtopic(subid); end
     def post(id); @posts[id]; end
 
+    def next_post_id
+      @posts.keys.max.to_i + 1
+    end
+
+    def compose(id, subid, author, title, text)
+      post = topic(id).compose(next_post_id, subid, author, title, text)
+      @posts[post.id] = post
+      sort_posts!
+      post
+    end
+
     def items_type; Topic; end
     def items_symbol; :topics; end
+
+    private
+
+    def sort_posts!
+      @posts = @posts.sort_by { |id, _| id }.reverse.to_h
+    end
   end
 
   class Topic < SectionWithMeta
@@ -135,20 +153,42 @@ module Faun
       raise "Non-nil parent for a topic" unless parent.nil?
       super(id, name, path, {})
 
-      @posts = @items.flat_map { |_, sub|  sub.posts.to_a }.sort_by { |id, _| id }.reverse.to_h
+      @posts = @items.flat_map { |_, sub|  sub.posts.to_a }
+      sort_posts!
     end
 
+    def full_id; "#{id}"; end
     def subtopic(subid); @items[subid]; end
+
+    def compose(post_id, subid, author, title, text)
+      post = subtopic(subid).compose(post_id, author, title, text)
+      @posts[post_id] = post
+      sort_posts!
+      post
+    end
 
     def my_symbol; :topic; end
     def items_type; Subtopic; end
     def items_symbol; :subtopics; end
+
+    private
+
+    def sort_posts!
+      @posts = @posts.sort_by { |id, _| id }.reverse.to_h
+    end
   end
 
   class Subtopic < SectionWithMeta
     include PostsJson
 
+    def initialize(*args)
+      super(*args)
+      sort_posts!
+    end
+
     alias posts items
+
+    def full_id; "#{parent[:topic]}.#{id}"; end
 
     def as_json(short:)
       j = super(short:)
@@ -157,13 +197,48 @@ module Faun
     end
     def json_skips_items; true; end
 
+    def compose(post_id, author, title, text)
+      post = Post.create({topic: full_id}, @path, post_id, author, title, text)
+      @items[post_id] = post
+      post
+    end
+
     def my_symbol; :subtopic; end
     def items_type; Post; end
     def items_symbol; :posts; end
+
+    private
+
+    def sort_posts!
+      @items = @items.sort_by { |id, _| id }.reverse.to_h
+    end
   end
 
   class Post < Section
     attr_reader :id, :meta, :content
+
+    def Post.create(parent, path, id, author, title, text)
+      path = File.join(path, "#{title}.@#{id}")
+      Async do
+        Dir.mkdir(path)
+        date = DateTime.now
+        ts = date.strftime("%Y-%m-%d %H-%M")
+        File.open(File.join(path, "#{ts}.md"), "w:UTF-8") do |file|
+          file << <<~YAML
+            ---
+            author: #{author}
+            written: #{date.strftime("%Y-%m-%d %H:%M")}
+            editions: 1
+            workflow: new
+            ---
+
+          YAML
+          file << text.gsub("\x0D", '')
+        end.close
+        File.symlink("#{ts}.md", File.join(path, "latest.md"))
+      end.wait
+      Post.new(id, title, path, parent)
+    end
 
     def initialize(id, name, path, parent)
       super(id, name, path, parent)

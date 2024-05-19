@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    title Compose new article
+
+    meta name="application" content="Faun"
+    meta name="theme-color" content="#1e1e1e"
+    meta name="color-scheme" content="dark"
+    meta name="robots" content="noindex, nofollow"
+
+    link rel="stylesheet" href="/wipe.css"
+    link rel="stylesheet" href="/main-layout.css"
+    link rel="stylesheet" href="/main-style.css"
+    link rel="stylesheet" href="/compose.css"
+
+  body
+    form method="post" target="_parent" action="/topics/#{topic.full_id.sub('.', '/')}/"
+      nav
+        h1 Compose a new article in "#{topic.name}"
+        input.button.i-submit type="submit" value=""
+      main
+        input type="text" id="title" name="title" placeholder="Name your article" required=true
+        textarea id="text" name="text" placeholder="Write article here" required=true

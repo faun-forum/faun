@@ -45,16 +45,17 @@ html
   body
     nav
       h1 Publications
+      - if topic
+        a.button.i-compose target="content" href="/topics/#{topic.full_id.sub('.', '/')}/compose" &nbsp;
 
     main
-      - if posts.empty?
-        .empty No posts here yet
-
       ul
+        - if posts.empty?
+          .empty No posts here yet
         - posts.each do |id, post|
           - attrs = (id.to_s == active) ? { class: "active" } : { }
           li *attrs
-            a href="/?post=#{id}#{topic&.id&.prepend("&topic=")}" target="_parent"
+            a href="/?post=#{id}#{topic&.id&.to_s&.prepend("&topic=")}" target="_parent"
               header =post.title
               div
                 span.author =forum.author_name(post.author)

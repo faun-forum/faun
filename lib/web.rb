@@ -36,6 +36,10 @@ module FaunWeb
     end
 
     def forum; settings.forum; end
+    def username
+      auth = Rack::Auth::Basic::Request.new(request.env)
+      auth.provided? && auth.credentials && auth.credentials[0]
+    end
 
     def active_from(select = nil)
       a = {
@@ -76,6 +80,16 @@ module FaunWeb
         :active => active_from(:post),
         :topic => sub
       }
+    end
+
+    get "/topics/:id/:subid/compose" do |id, subid|
+      sub = forum.subtopic(id.to_i, subid.to_i)
+      slim :compose, :locals => { :topic => sub }
+    end
+
+    post "/topics/:id/:subid/" do |id, subid|
+      post = forum.compose(id.to_i, subid.to_i, username, params['title'], params['text'])
+      redirect to("/?topic=#{id}.#{subid}&post=#{post.id}")
     end
 
     get "/posts/" do
