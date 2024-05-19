@@ -133,7 +133,5 @@ module FaunWeb
       thread = post.threads[tid.to_i]
       slim :thread, :locals => { :thread => thread, :active => active_from(:comment) }
     end
-
-    run!
   end
 end
