@@ -17,17 +17,17 @@ class FaunCli < Thor
   def initialize(args = [], local_options = {}, config = {})
     super
     @json = options[:json] || false
-    @forum = Faun::Forum.new("/var/lib/faun/#{options[:forum]}") if options[:forum]
+    forum = Faun::Forum.new("/var/lib/faun/#{options[:forum]}") if options[:forum]
   end
 
   desc "contents", "List forum topics"
   def contents
     if @json
-      puts JSON(@forum)
+      puts JSON(forum)
       return
     end
 
-    meta = @forum.meta || {}
+    meta = forum.meta || {}
     puts
     print meta["name"].ljust(35).colorize(:light_green).bold if meta["name"]
     print "\t", meta["details"] if meta["details"]
@@ -35,7 +35,7 @@ class FaunCli < Thor
     puts
 
     parts = meta["parts"] || {}
-    @forum.each do |id, topic|
+    forum.each do |id, topic|
       if (part = parts[id])
         print part["name"].ljust(35).colorize(:light_green).underline if part["name"]
         print "\t", part["details"].colorize(:light_black) if part["details"]
@@ -75,7 +75,7 @@ class FaunCli < Thor
 
   desc "article", "print specific article"
   def article(id)
-    post = @forum.post(id.to_i)
+    post = forum.post(id.to_i)
     if @json
       puts post.to_json
     else

@@ -6,9 +6,9 @@ html
     meta name="application" content="Faun"
     meta name="theme-color" content="#1e1e1e"
     meta name="color-scheme" content="dark"
-    meta name="creator" content="#{@forum.seo["creator"]}"
-    meta name="publisher" content="#{@forum.seo["publisher"]}"
-    meta name="robots" content="#{@forum.seo["robots"]}"
+    meta name="creator" content="#{forum.seo["creator"]}"
+    meta name="publisher" content="#{forum.seo["publisher"]}"
+    meta name="robots" content="#{forum.seo["robots"]}"
 
     link rel="stylesheet" href="/wipe.css"
     link rel="stylesheet" href="/main-layout.css"
@@ -37,6 +37,6 @@ html
           li *attrs
             section
               header
-                span.author &ndash; #{@forum.author_name(comment.author)}:
+                span.author &ndash; #{forum.author_name(comment.author)}:
                 span.date =comment.created.strftime("%d %b %Y, %I:%M %p")
               .comment ==comment.markdown_content

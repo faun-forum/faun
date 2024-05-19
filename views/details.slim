@@ -1,16 +1,16 @@
 doctype html
 html
   head
-    title =topic&.name || "#{@forum.name} Articles"
-    - if topic&.meta&["details"]
+    title =topic&.name || "#{forum.name} Articles"
+    - if topic&.meta&.has_key?("details")
       meta name="description" content="#{topic.meta['details']}"
 
     meta name="application" content="Faun"
     meta name="theme-color" content="#1e1e1e"
     meta name="color-scheme" content="dark"
-    meta name="creator" content="#{@forum.seo["creator"]}"
-    meta name="publisher" content="#{@forum.seo["publisher"]}"
-    meta name="robots" content="#{@forum.seo["robots"]}"
+    meta name="creator" content="#{forum.seo["creator"]}"
+    meta name="publisher" content="#{forum.seo["publisher"]}"
+    meta name="robots" content="#{forum.seo["robots"]}"
 
     link rel="stylesheet" href="/wipe.css"
     link rel="stylesheet" href="/main-layout.css"
@@ -57,5 +57,5 @@ html
             a href="/?post=#{id}#{topic&.id&.prepend("&topic=")}" target="_parent"
               header =post.title
               div
-                span.author =@forum.author_name(post.author)
+                span.author =forum.author_name(post.author)
                 span.date =post.meta["written"].strftime("%d %b %Y")

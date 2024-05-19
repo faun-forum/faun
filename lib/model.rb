@@ -89,9 +89,16 @@ module Faun
   class Forum < SectionWithMeta
     include PostsJson
 
-    attr_reader :posts, :seo, :defaults
+    attr_reader :posts, :seo, :defaults, :users
 
     def initialize(path)
+      Async do
+        File.open(File.join(path, "users.yaml"), "r:UTF-8") do |file|
+          generic = Async::IO::Stream.new(file)
+          @users = YAML.load(generic.read)
+        end
+      end.wait
+
       super(0, nil, path)
 
       @name = @meta["name"]
