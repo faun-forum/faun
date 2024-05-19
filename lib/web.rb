@@ -140,8 +140,15 @@ module FaunWeb
 
     post "/posts/:id/threads/" do |id|
       post = forum.post(id.to_i)
-      thread = post.reply(id.to_i, username, params['name'], params['text'])
-      redirect to("/posts/#{id}/threads/#{thread.id}/#comment-1")
+      thread = post.reply(username, params['name'], params['text'])
+      redirect to("/posts/#{id}/?thread=#{thread.id}")
+    end
+
+    post "/posts/:id/threads/:tid/" do |id, tid|
+      post = forum.post(id.to_i)
+      thread = post.thread(tid.to_i)
+      comment = thread.reply(username, params['text'])
+      redirect to("/posts/#{id}/threads/#{tid}/#comment-#{comment.id}")
     end
 
     get "/posts/:id/threads/:tid/" do |id, tid|

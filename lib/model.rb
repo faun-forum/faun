@@ -217,12 +217,15 @@ module Faun
   class Post < Section
     attr_reader :id, :meta, :content
 
-    def Post.create(parent, path, id, author, title, text)
+    def self.create(parent, path, id, author, title, text)
       path = File.join(path, "#{title}.@#{id}")
+
+      date = DateTime.now
+      ts = date.strftime("%Y-%m-%d %H-%M")
+      text.gsub!("\x0D", '')
+
       Async do
         Dir.mkdir(path)
-        date = DateTime.now
-        ts = date.strftime("%Y-%m-%d %H-%M")
         File.open(File.join(path, "#{ts}.md"), "w:UTF-8") do |file|
           file << <<~YAML
             ---
@@ -233,10 +236,11 @@ module Faun
             ---
 
           YAML
-          file << text.gsub("\x0D", '')
+          file << text
         end.close
         File.symlink("#{ts}.md", File.join(path, "latest.md"))
       end.wait
+
       Post.new(id, title, path, parent)
     end
 
@@ -262,10 +266,18 @@ module Faun
 
     def author; @meta["author"]; end
     def details; @meta["details"]; end
+    def thread(tid); @items[tid]; end
     def comment_count; @items.values.map { |thread| thread.comments.count }.sum; end
     def comment_authors; @items.values.map{ |thread| thread.authors }.flatten.uniq; end
 
     def asset_path(name); "#{@path}/.assets/#{name}"; end
+
+    def reply(author, name, text)
+      tid = threads.keys.max.to_i + 1
+      thread = ForumThread.create(tid, author, name, text, @path, @parent.update(post: @id))
+      @items[tid] = thread
+      thread
+    end
 
     def as_json(short: false)
       j = super(short:)
@@ -289,7 +301,23 @@ module Faun
   end
 
   class ForumThread < Section
-    attr_reader :post
+    def self.create(id, author, name, text, path, parent)
+      path = File.join(path, "#{name}.@#{id}")
+
+      date = DateTime.now
+      ts = date.strftime("%Y-%m-%d.%H-%M")
+      text.gsub!("\x0D", '')
+      cid = 1
+
+      Async do
+        Dir.mkdir(path)
+        File.open(File.join(path, "#{'%03d' % cid}.#{author}.#{ts}.md"), "w:UTF-8") do |file|
+          file << text
+        end.close
+      end.wait
+
+      ForumThread.new(id, name, path, parent)
+    end
 
     def initialize(id, name, path, parent)
       @id = id
@@ -335,6 +363,23 @@ module Faun
       else
         unique_authors
       end
+    end
+
+    def reply(author, text)
+      date = DateTime.now
+      ts = date.strftime("%Y-%m-%d.%H-%M")
+      text.gsub!("\x0D", '')
+      cid = @items.keys.max.to_i + 1
+
+      Async do
+        File.open(File.join(@path, "#{'%03d' % cid}.#{author}.#{ts}.md"), "w:UTF-8") do |file|
+          file << text
+        end.close
+      end.wait
+
+      comment = Comment.new(cid, author, date, text, @parent.update(thread: @id))
+      @items[cid] = comment
+      comment
     end
 
     def my_symbol; :thread; end

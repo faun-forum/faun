@@ -14,7 +14,8 @@ html
     link rel="stylesheet" href="/comment.css"
 
   body
-    form method="post" target="_self" action="/posts/#{post}/threads/#{thread&.concat('/')}"
+    - target = thread.nil? ? "_parent" : "_self"
+    form method="post" target="#{target}" action="/posts/#{post}/threads/#{thread&.concat('/')}"
       nav
         h1 Reply
         input.button.i-submit type="submit" value=""
