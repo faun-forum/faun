@@ -12,10 +12,11 @@ module Faun
   class Error < StandardError; end
 
   class Section
-    attr_reader :id, :name, :items
+    attr_reader :id, :name, :items, :parent
 
-    def initialize(id, name, path, type)
+    def initialize(id, name, path, parent)
       @id = id
+      @parent = parent
       @name = name
       @path = path
 
@@ -24,38 +25,44 @@ module Faun
         dir = File.join(path, section)
         next unless File.directory?(dir) and not section.start_with?('.')
 
-        name, _, id = section.rpartition(".@")
-        id = id.to_i
-        subs[id] = type.new(id, name, dir)
+        name, _, subid = section.rpartition(".@")
+        subid = subid.to_i
+        unless parent.nil?
+          parent = parent.clone
+          parent[my_symbol] = @id if respond_to?(:my_symbol)
+        end
+        subs[subid] = items_type.new(subid, name, dir, parent)
       end
       @items = subs.sort_by { |subid, _| subid }.to_h
     end
 
-    def each(&block)
-      @items.each(&block)
-    end
+    def each(&block); @items.each(&block); end
+    def each_key(&block); @items.each_key(&block); end
+    def each_value(&block); @items.each_value(&block); end
 
-    def each_key(&block)
-      @items.each_key(&block)
-    end
-
-    def each_value(&block)
-      @items.each_value(&block)
-    end
-
-    def to_json(*args)
-      {
+    def as_json(short:)
+      j = {
         :id => @id,
-        item_name => @items
-      }.to_json(*args)
+        :name => @name,
+      }
+      j[:parent] = @parent if @parent
+      j[items_symbol] = @items unless json_skips_items
+      j
     end
+
+    def to_json(*args, short: false)
+      as_json(short:).to_json(*args)
+    end
+
+    def json_skips_items; false; end
+    def items_symbol; :items; end
   end
 
   class SectionWithMeta < Section
     attr_reader :meta
 
-    def initialize(id, name, path, type)
-      super(id, name, path, type)
+    def initialize(id, name, path, parent = nil)
+      super(id, name, path, parent)
 
       Async do
         begin
@@ -68,32 +75,34 @@ module Faun
         end
       end.wait
     end
+
+    def as_json(short:); @meta.merge(super(short:)); end
+  end
+
+  module PostsJson
+    def posts_json
+      puts posts.keys
+      posts.map { |id, post| [id, post.as_json(short: true)] }.to_h.to_json
+    end
   end
 
   class Forum < SectionWithMeta
+    include PostsJson
+
     attr_reader :posts, :seo, :defaults
 
     def initialize(path)
-      super(0, nil, path, Topic)
+      super(0, nil, path)
 
-      @posts = @items.flat_map do |_, topic|
-        topic.posts.to_a
-      end.sort_by do |id, _|
-        id
-      end.reverse.to_h
+      @name = @meta["name"]
+      @meta.delete("name")
+
+      @posts = @items.flat_map { |_, topic| topic.posts.to_a }.sort_by { |id, _| id }.reverse.to_h
     end
 
-    def seo
-      @meta["seo"] || {}
-    end
-
-    def defaults
-      @meta["defaults"] || {}
-    end
-
-    def author_name(nick)
-      @meta["authors"][nick] || nick
-    end
+    def seo; @meta["seo"] || {}; end
+    def defaults; @meta["defaults"] || {}; end
+    def author_name(nick); @meta["authors"][nick] || nick; end
 
     def topic_from(path)
       id, subid = path.split('.')
@@ -102,62 +111,56 @@ module Faun
       topic
     end
 
-    def topic(id)
-      @items[id]
-    end
+    def topic(id); @items[id]; end
+    def subtopic(id, subid); @items[id].subtopic(subid); end
+    def post(id); @posts[id]; end
 
-    def subtopic(id, subid)
-      @items[id].subtopic(subid)
-    end
-
-    def post(id)
-      @posts[id]
-    end
-
-    def item_name
-      "topics"
-    end
+    def items_type; Topic; end
+    def items_symbol; :topics; end
   end
 
   class Topic < SectionWithMeta
+    include PostsJson
+
     attr_reader :posts
 
-    def initialize(id, name, path)
-      super(id, name, path, Subtopic)
+    def initialize(id, name, path, parent)
+      raise "Non-nil parent for a topic" unless parent.nil?
+      super(id, name, path, {})
 
-      @posts = @items.flat_map do |_, sub|
-        sub.posts.to_a
-      end.to_h
+      @posts = @items.flat_map { |_, sub|  sub.posts.to_a }.sort_by { |id, _| id }.reverse.to_h
     end
 
-    def subtopic(subid)
-      @items[subid]
-    end
+    def subtopic(subid); @items[subid]; end
 
-    def item_name
-      "chapters"
-    end
+    def my_symbol; :topic; end
+    def items_type; Subtopic; end
+    def items_symbol; :subtopics; end
   end
 
   class Subtopic < SectionWithMeta
-    def initialize(id, name, path)
-      super(id, name, path, Post)
-    end
+    include PostsJson
 
-    def posts
-      @items
-    end
+    alias posts items
 
-    def item_name
-      "posts"
+    def as_json(short:)
+      j = super(short:)
+      j[:parent] = j[:parent][:topic]
+      j
     end
+    def json_skips_items; true; end
+
+    def my_symbol; :subtopic; end
+    def items_type; Post; end
+    def items_symbol; :posts; end
   end
 
   class Post < Section
     attr_reader :id, :meta, :content
 
-    def initialize(id, name, path)
-      super(id, name, path, ForumThread)
+    def initialize(id, name, path, parent)
+      super(id, name, path, parent)
+
       Async do
         File.open(File.join(path, "latest.md"), "r:UTF-8") do |file|
           generic = Async::IO::Stream.new(file)
@@ -172,40 +175,43 @@ module Faun
       end.wait
     end
 
-    def title
-      @name
+    alias title name
+    alias threads items
+
+    def author; @meta["author"]; end
+    def details; @meta["details"]; end
+    def comment_count; @items.values.map { |thread| thread.comments.count }.sum; end
+    def comment_authors; @items.values.map{ |thread| thread.authors }.flatten.uniq; end
+
+    def asset_path(name); "#{@path}/.assets/#{name}"; end
+
+    def as_json(short: false)
+      j = super(short:)
+      j.merge!(@meta)
+      if short
+        j.merge!(
+          thread_count: threads.count,
+          comment_count: comment_count,
+          comment_authors: comment_authors
+        )
+        j.delete(:threads)
+      else
+        j.merge!(content: @content)
+      end
+      j
     end
 
-    def author
-      @meta["author"]
-    end
-
-    def threads
-      @items
-    end
-
-    def asset_path(name)
-      "#{@path}/.assets/#{name}"
-    end
-
-    def item_name
-      "threads"
-    end
-
-    def to_json(*args)
-      json = @meta.clone
-      json.merge!(
-        id: @id,
-        content: @content,
-        threads: @items
-      )
-      json.to_json(*args)
-    end
+    def my_symbol; :post; end
+    def items_type; ForumThread; end
+    def items_symbol; :threads; end
   end
 
   class ForumThread < Section
-    def initialize(id, name, path)
+    attr_reader :post
+
+    def initialize(id, name, path, parent)
       @id = id
+      @parent = parent
       @name = name
       @path = path
 
@@ -230,57 +236,55 @@ module Faun
           end
         end.wait
 
-        comments[id] = Comment.new(id, author, datetime, content)
+        parent[:thread] = @id
+        comments[id] = Comment.new(id, author, datetime, content, parent)
       end
       @items = comments.sort_by { |id, _| id }.to_h
     end
 
-    def title
-      @name
-    end
-
-    def comments
-      @items
-    end
+    alias title name
+    alias comments items
 
     def authors
-      @items.values.map(&:author).uniq
+      unique_authors = @items.values.map(&:author).uniq
+
+      if block_given?
+        unique_authors.each { |author| yield author }
+      else
+        unique_authors
+      end
     end
 
-    def item_name
-      "comments"
-    end
-
-    def to_json(*args)
-      {
-        :id => id,
-        :title => @name,
-        :comments => @items
-      }.to_json
-    end
+    def my_symbol; :thread; end
+    def items_type; Comment; end
+    def items_symbol; :comments; end
   end
 
   class Comment
-    attr_reader :id, :author, :created, :content
+    attr_reader :id, :author, :created, :content, :parent
 
-    def initialize(id, author, created, content)
+    def initialize(id, author, created, content, parent)
       @id = id
       @author = author
       @created = created
       @content = content
+      @parent = parent
     end
 
     def markdown_content
       Kramdown::Document.new(@content).to_html
     end
 
-    def to_json(*args)
+    def as_json(*)
       {
-        :id => id,
+        :id => @id,
+        :parent => @parent,
         :author => @author,
         :created => @created,
         :content => @content
-      }.to_json
+      }
     end
+
+    def to_json(*args); as_json(*args).to_json; end
   end
 end

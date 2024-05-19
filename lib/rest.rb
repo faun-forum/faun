@@ -25,16 +25,16 @@ module FaunWeb
 
       get '/topics/:id' do |id|
         topic = @forum.topic(id.to_i)
-        topic.posts.to_json
+        topic.posts_json
       end
 
       get '/topics/:id/:subid' do |id, subid|
         sub = @forum.subtopic(id.to_i, subid.to_i)
-        sub.posts.to_json
+        sub.posts_json
       end
 
       get '/posts' do
-        @forum.posts.to_json
+        @forum.posts_json
       end
 
       get '/posts/:id' do |id|
