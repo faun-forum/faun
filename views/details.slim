@@ -1,7 +1,17 @@
 doctype html
 html
   head
-    title Post List
+    title =topic&.name || "#{@forum.name} Articles"
+    - if topic&.meta&["details"]
+      meta name="description" content="#{topic.meta['details']}"
+
+    meta name="application" content="Faun"
+    meta name="theme-color" content="#1e1e1e"
+    meta name="color-scheme" content="dark"
+    meta name="creator" content="#{@forum.seo["creator"]}"
+    meta name="publisher" content="#{@forum.seo["publisher"]}"
+    meta name="robots" content="#{@forum.seo["robots"]}"
+
     link rel="stylesheet" href="/wipe.css"
     link rel="stylesheet" href="/main-layout.css"
     link rel="stylesheet" href="/main-style.css"
