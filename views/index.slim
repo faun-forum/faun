@@ -43,4 +43,4 @@ html
     #forum
       iframe#sidebar name="sidebar" src="/topics/#{active[:topic]&.clone&.prepend('?active=')}"
       iframe#details name="details" src="#{active[:topic] ? active[:topic].clone.sub('.', '/').concat('/').prepend('/topics/') : '/posts/'}#{active[:post]&.clone&.to_s&.prepend('?post=')}"
-      iframe#content name="content" src="/posts/#{active[:post]}/?contents=true"
+      iframe#content name="content" src="/posts/#{active[:post]}/?contents=true&discussion=#{discussion}"

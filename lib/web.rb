@@ -57,7 +57,8 @@ module FaunWeb
     end
 
     get "/" do
-      slim :index, { :locals => { :active => active_from } }
+      discussion = params["discussion"].nil? ? true : params["discussion"] == "true"
+      slim :index, { :locals => { :active => active_from, :discussion => discussion } }
     end
 
     get "/topics/" do
@@ -108,6 +109,7 @@ module FaunWeb
       discussion = false if post.threads.empty?
       slim :content, :locals => {
         :post => post,
+        :topic => "#{post.parent[:topic]}.#{post.parent[:subtopic]}",
         :content => content,
         :contents => contents,
         :discussion => discussion,

@@ -77,7 +77,9 @@ html
       nav
         div
           - if contents == true
-            a.button.i-sidebar-close-left href="/posts/#{post.id}/" target="_parent" &nbsp;
+            a.button.i-sidebar-close-left href="/posts/#{post.id}/?discussion=#{discussion}" target="_parent" &nbsp;
+          - else
+            a.button.i-bookshelf href="/?topic=#{topic}&post=#{post.id}&discussion=#{discussion}" target="_parent" &nbsp;
           h1 Article
         - if discussion == true
           a.button.i-sidebar-close-right href="/posts/#{post.id}/?discussion=false&contents=#{contents}" target="_self" &nbsp;
