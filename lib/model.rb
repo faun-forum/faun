@@ -78,7 +78,9 @@ module Faun
 
       @posts = @items.flat_map do |_, topic|
         topic.posts.to_a
-      end.to_h
+      end.sort_by do |id, _|
+        id
+      end.reverse.to_h
     end
 
     def seo

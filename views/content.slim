@@ -94,4 +94,4 @@ html
                   =thread.title
                   span.count =thread.comments.count
 
-      iframe name="comments" src="/posts/#{post.id}/threads/#{active&.concat('/')}"
+      iframe name="comments" src="/posts/#{post.id}/threads/#{active&.dup&.concat('/')}"

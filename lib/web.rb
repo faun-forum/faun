@@ -74,6 +74,7 @@ module FaunWeb
       content = Kramdown::Document.new(post.content).to_html
       contents = params["contents"] == "true"
       discussion = params["discussion"].nil? ? true : params["discussion"] == "true"
+      discussion = false if post.threads.empty?
       slim :content, :locals => {
         :post => post,
         :content => content,

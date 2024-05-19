@@ -20,11 +20,11 @@ html
   body
     nav: h1 Comments
     main
-      - if thread.comments.empty?
+      - if not thread or thread.comments.empty?
         .empty No comments yet
 
       ol
-        - thread.comments.each do |cid, comment|
+        - thread&.comments&.each do |cid, comment|
           - attrs = (cid.to_s == active) ? { class: "active" } : { }
           li *attrs
             section
