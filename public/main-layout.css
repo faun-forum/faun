@@ -9,7 +9,7 @@ nav {
     align-items: center;
 }
 
-main > nav, aside > nav, body > nav {
+main > nav, aside > nav, body > nav, body > form > nav {
     position: fixed;
     top: 0;
     left: 0;

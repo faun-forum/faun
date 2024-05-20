@@ -18,6 +18,20 @@ section header {
 
     display: flex;
     align-items: flex-end;
+    justify-content: space-between;
+}
+
+ol {
+    padding-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
+}
+
+li {
+    margin-bottom: 0.5rem;
 }
 
 li + li {
@@ -32,6 +46,7 @@ li + li {
 .date {
     font-size: smaller;
     vertical-align: baseline;
+    text-align: right;
 }
 
 .comment {
@@ -85,6 +100,12 @@ li + li {
  * Commenting
  */
 
+footer {
+    margin-top: auto;
+    width: 100%;
+    border-top: 1pt dotted #888;
+}
+
 input[type="submit"] {
     border: none;
     cursor: pointer !important;
@@ -117,5 +138,6 @@ textarea {
     font-size: 85%;
     line-height: 1.6;
     min-height: 20em;
-    padding-bottom: 32pt;
+    height: fit-content;
+    margin-bottom: 1rem;
 }

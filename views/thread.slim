@@ -15,16 +15,6 @@ html
     link rel="stylesheet" href="/main-style.css"
     link rel="stylesheet" href="/thread.css"
 
-    css:
-        li header {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        li header .date {
-            text-align: right;
-        }
-
   body
     nav
       h1 Comments
@@ -43,13 +33,12 @@ html
                 span.author &ndash; #{forum.author_name(comment.author)}:
                 span.date =comment.created.strftime("%d %b %Y, %I:%M %p")
               .comment ==comment.markdown_content
-        li
+
+        footer
           section
             header
               span.author &ndash; #{forum.author_name(username)}:
               span.date Now
-
-        footer
           form method="post" target="_self" action="/posts/#{thread.parent[:post]}/threads/#{thread.id}/"
             textarea id="reply" name="reply" placeholder="Write your reply" required=true
             nav
