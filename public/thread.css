@@ -80,3 +80,42 @@ li + li {
     padding-top: 0.25em;
     padding-bottom: 0.2em;
 }
+
+/*
+ * Commenting
+ */
+
+input[type="submit"] {
+    border: none;
+    cursor: pointer !important;
+    background-color: transparent;
+}
+
+input[type="text"], textarea {
+    background-color: #181818;
+    display: block;
+    width: 100%;
+    border: none;
+    margin: 0;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus, textarea:focus {
+    outline: none;
+}
+
+input#name {
+    font-family: "Alumni Sans", "Impact", sans-serif;
+    font-size: larger;
+}
+
+textarea {
+    flex-grow: 1;
+    border: none;
+    font-family: "Roboto Slab", sans-serif;
+    font-size: 85%;
+    line-height: 1.6;
+    min-height: 20em;
+    padding-bottom: 32pt;
+}

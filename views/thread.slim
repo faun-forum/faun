@@ -29,7 +29,7 @@ html
     nav
       h1 Comments
       - if !!thread
-        a.button.i-reply href="/posts/#{thread.parent[:post]}/threads/#{thread.id}/reply/" target="_self" &nbsp;
+        a.button.i-reply href="#reply" target="_self" &nbsp;
     main
       - if not thread or thread.comments.empty?
         .empty No comments yet
@@ -43,3 +43,15 @@ html
                 span.author &ndash; #{forum.author_name(comment.author)}:
                 span.date =comment.created.strftime("%d %b %Y, %I:%M %p")
               .comment ==comment.markdown_content
+        li
+          section
+            header
+              span.author &ndash; #{forum.author_name(username)}:
+              span.date Now
+
+        footer
+          form method="post" target="_self" action="/posts/#{thread.parent[:post]}/threads/#{thread.id}/"
+            textarea id="reply" name="reply" placeholder="Write your reply" required=true
+            nav
+              div
+              input.button.i-submit type="submit" value=""

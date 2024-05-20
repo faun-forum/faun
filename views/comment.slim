@@ -11,7 +11,15 @@ html
     link rel="stylesheet" href="/wipe.css"
     link rel="stylesheet" href="/main-layout.css"
     link rel="stylesheet" href="/main-style.css"
-    link rel="stylesheet" href="/comment.css"
+    link rel="stylesheet" href="/thread.css"
+
+    css:
+      main {
+          display: flex;
+          flex-direction: column;
+          height: 100vh;
+          box-sizing: border-box;
+      }
 
   body
     - target = thread.nil? ? "_parent" : "_self"
