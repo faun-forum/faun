@@ -92,6 +92,8 @@ module Faun
     attr_reader :posts, :seo, :defaults, :users
 
     def initialize(path)
+      puts "Loading forum from disk"
+
       Async do
         File.open(File.join(path, "users.yaml"), "r:UTF-8") do |file|
           generic = Async::IO::Stream.new(file)
