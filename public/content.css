@@ -144,6 +144,18 @@ article tr:nth-child(even) {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
+article blockquote {
+    border-left: 3pt solid #333;
+    padding-left: 0.5em;
+    margin: 0.5rem 0;
+    color: #999;
+    font-style: italic;
+}
+
+article blockquote > p:first-of-type {
+    padding: 0;
+}
+
 article .question {
     position: relative;
     border-radius: 0 0.5rem 0.5rem 0.5rem;
@@ -151,16 +163,17 @@ article .question {
     margin-right: 1rem;
     background-color: #111;
     border: 1px solid #333;
-    &::after {
-        content: "?";
-        line-height: 0.6;
-        position: absolute;
-        right: -3rem;
-        top: 1rem;
-        font-weight: 800;
-        font-size: 500%;
-        color: #FFFFFF40;
-    }
+}
+
+article .question::after {
+    content: "?";
+    line-height: 0.6;
+    position: absolute;
+    right: -3rem;
+    top: 1rem;
+    font-weight: 800;
+    font-size: 500%;
+    color: #FFFFFF40;
 }
 
 article .reply {
@@ -170,28 +183,54 @@ article .reply {
     margin-left: 1rem;
     background-color: #1e1f22;
     border: 1px solid #333;
-    *:first-child {
-        padding-top: 0;
-    }
-    *:last-child {
-        padding-bottom: 0;
-    }
-    &::before {
-        content: "!";
-        line-height: 0.6;
-        position: absolute;
-        left: -2rem;
-        top: 1rem;
-        font-weight: 800;
-        font-size: 500%;
-        color: #FFFFFF40;
-    }
 }
 
-article {
-    .reply + .question, .question + .reply {
-        margin-top: 1rem;
-    }
+article .reply *:first-child {
+    padding-top: 0;
+}
+
+article .reply *:last-child {
+    padding-bottom: 0;
+}
+
+article .reply::before {
+    content: "!";
+    line-height: 0.6;
+    position: absolute;
+    left: -2rem;
+    top: 1rem;
+    font-weight: 800;
+    font-size: 500%;
+    color: #FFFFFF40;
+}
+
+article .reply + .question, article .question + .reply {
+    margin-top: 1rem;
+}
+
+article p.dialog {
+    margin-left: 2rem;
+}
+
+article p.dialog:before {
+    float: left;
+    color: #666666;
+    content: "«";
+    display: block;
+    font-size: 400%;
+    margin-top: -0.66em;
+    margin-left: -2rem;
+}
+
+article p.dialog:after {
+    display: block;
+    font-style: italic;
+    text-align: right;
+}
+
+article p.dialog[author]:after {
+    content: "– " attr(author);
+    text-transform: capitalize;
 }
 
 /*
